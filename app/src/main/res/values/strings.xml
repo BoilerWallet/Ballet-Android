@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Ballet</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <!-- Navigation Bar Titles -->
+    <string name="navigation_title_wallet">Wallet</string>
+    <string name="navigation_title_send">Send</string>
+    <string name="navigation_title_receive">Receive</string>
+    <string name="navigation_title_settings">Settings</string>
+    <!-- Section End -->
 </resources>
