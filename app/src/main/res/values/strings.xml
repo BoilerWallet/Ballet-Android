@@ -6,5 +6,17 @@
     <string name="navigation_title_send">Send</string>
     <string name="navigation_title_receive">Receive</string>
     <string name="navigation_title_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="balance_eth">$BALANCE$ ETH</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="history_transactions">History (Transactions)</string>
+    <string name="from_to"><![CDATA[From -> To]]></string>
+    <string name="value">Value</string>
+    <string name="when">When</string>
     <!-- Section End -->
 </resources>

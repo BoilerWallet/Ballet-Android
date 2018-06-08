@@ -1,6 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- Own palette -->
+    <color name="colorPrimary">@color/cyan500</color>
+    <color name="colorPrimaryDark">@color/cyan600</color>
+    <color name="colorAccent">@color/pink500</color>
+    <color name="colorAccentLight">@color/pink400</color>
+    <color name="colorAccentDark">@color/pink600</color>
+    <color name="backgroundColor">@color/grey50</color>
+
+    <!-- Cyan pallette -->
+    <color name="cyan50">#E0F7FA</color>
+    <color name="cyan100">#B2EBF2</color>
+    <color name="cyan200">#80DEEA</color>
+    <color name="cyan300">#4DD0E1</color>
+    <color name="cyan400">#26C6DA</color>
+    <color name="cyan500">#00BCD4</color>
+    <color name="cyan600">#00ACC1</color>
+    <color name="cyan700">#0097A7</color>
+    <color name="cyan800">#00838F</color>
+    <color name="cyan900">#006064</color>
+    <!-- Cyan alternatives -->
+    <color name="cyanA100">#84FFFF</color>
+    <color name="cyanA200">#18FFFF</color>
+    <color name="cyanA400">#00E5FF</color>
+    <color name="cyanA700">#00B8D4</color>
+
+
+    <!-- Pink pallette -->
+    <color name="pink50">#fce4ec</color>
+    <color name="pink100">#f8bbd0</color>
+    <color name="pink200">#f48fb1</color>
+    <color name="pink300">#f06292</color>
+    <color name="pink400">#ec407a</color>
+    <color name="pink500">#e91e63</color>
+    <color name="pink600">#d81b60</color>
+    <color name="pink700">#c2185b</color>
+    <color name="pink800">#ad1457</color>
+    <color name="pink900">#880e4f</color>
+    <!-- Pink alternatives -->
+    <color name="pinkA100">#ff80ab</color>
+    <color name="pinkA200">#ff4081</color>
+    <color name="pinkA400">#f50057</color>
+    <color name="pinkA700">#c51162</color>
+
+
+    <!-- Deep purple pallette -->
+    <color name="deep_purple50">#ede7f6</color>
+    <color name="deep_purple100">#d1c4e9</color>
+    <color name="deep_purple200">#b39ddb</color>
+    <color name="deep_purple300">#9575cd</color>
+    <color name="deep_purple400">#7e57c2</color>
+    <color name="deep_purple500">#673ab7</color>
+    <color name="deep_purple600">#5e35b1</color>
+    <color name="deep_purple700">#512da8</color>
+    <color name="deep_purple800">#4527a0</color>
+    <color name="deep_purple900">#311b92</color>
+    <!-- Deep purple alternatives -->
+    <color name="deep_purpleA100">#b388ff</color>
+    <color name="deep_purpleA200">#7c4dff</color>
+    <color name="deep_purpleA400">#651fff</color>
+    <color name="deep_purpleA700">#6200ea</color>
+
+    <!-- Red pallette -->
+    <color name="red50">#ffebee</color>
+    <color name="red100">#ffcdd2</color>
+    <color name="red200">#ef9a9a</color>
+    <color name="red300">#e57373</color>
+    <color name="red400">#ef5350</color>
+    <color name="red500">#f44336</color>
+    <color name="red600">#e53935</color>
+    <color name="red700">#d32f2f</color>
+    <color name="red800">#c62828</color>
+    <color name="red900">#b71c1c</color>
+    <!-- Red alternatives -->
+    <color name="redA100">#ff8a80</color>
+    <color name="redA200">#ff5252</color>
+    <color name="redA400">#ff1744</color>
+    <color name="redA700">#d50000</color>
+
+    <!-- Green pallette -->
+    <color name="green50">#e8f5e9</color>
+    <color name="green100">#c8e6c9</color>
+    <color name="green200">#a5d6a7</color>
+    <color name="green300">#81c784</color>
+    <color name="green400">#66bb6a</color>
+    <color name="green500">#4caf50</color>
+    <color name="green600">#43a047</color>
+    <color name="green700">#388e3c</color>
+    <color name="green800">#2e7d32</color>
+    <color name="green900">#1b5e20</color>
+    <!-- Green alternatives -->
+    <color name="greenA100">#b9f6ca</color>
+    <color name="greenA200">#69f0ae</color>
+    <color name="greenA400">#00e676</color>
+    <color name="greenA700">#00c853</color>
+
+    <!-- Grey pallette -->
+    <color name="grey50">#FAFAFA</color>
+    <color name="grey100">#F5F5F5</color>
+    <color name="grey200">#EEEEEE</color>
+    <color name="grey300">#E0E0E0</color>
+    <color name="grey400">#BDBDBD</color>
+    <color name="grey500">#9E9E9E</color>
+    <color name="grey600">#757575</color>
+    <color name="grey700">#616161</color>
+    <color name="grey800">#424242</color>
+    <color name="grey900">#212121</color>
+
+    <!-- Text colors -->
+    <color name="dark_text_primary">#de000000</color>
+    <color name="dark_text_secondary">#8A000000</color>
+    <color name="dark_text_disabled">#61000000</color>
+    <color name="dark_text_divider">#1f000000</color>
+
+    <color name="light_text_primary">#FFFFFFFF</color>
+    <color name="light_text_secondary">#B2FFFFFF</color>
+    <color name="light_text_disabled">#7FFFFFFF</color>
+    <color name="light_text_divider">#1FFFFFFF</color>
+
 </resources>
