@@ -83,6 +83,22 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/erc20_tokens"
+                android:textColor="@color/light_text_secondary"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
@@ -103,26 +119,31 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="@string/from_to"/>
+                android:text="@string/from_to"
+                android:textColor="@color/dark_text_primary"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="@string/value"/>
+                android:text="@string/value"
+                android:textColor="@color/dark_text_primary"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="@string/when"/>
+                android:text="@string/when"
+                android:textColor="@color/dark_text_primary"/>
 
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:context=".WalletDetailsFragment"
+            tools:listitem="@layout/transaction_history_entry" />
 
     </LinearLayout>
 

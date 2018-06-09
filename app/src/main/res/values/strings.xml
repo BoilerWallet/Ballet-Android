@@ -18,5 +18,7 @@
     <string name="from_to"><![CDATA[From -> To]]></string>
     <string name="value">Value</string>
     <string name="when">When</string>
+    <string name="erc20_tokens">ERC20 TOKENS</string>
+    <string name="sender_receiver"><![CDATA[$SENDER$ -> $RECEIVER$]]></string>
     <!-- Section End -->
 </resources>
