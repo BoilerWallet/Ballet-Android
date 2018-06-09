@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@mipmap/ic_cirno_adaptifknsht"
+    android:insetLeft="16.6%"
+    android:insetRight="16.6%"
+    android:insetTop="14.8%"
+    android:insetBottom="18.5%"/>
