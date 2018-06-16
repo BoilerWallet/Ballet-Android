@@ -44,7 +44,8 @@ public class EtherBlockies {
         randseed[0] = randseed[1];
         randseed[1] = randseed[2];
         randseed[2] = randseed[3];
-        randseed[3] = randseed[3] ^ (randseed[3] >> 19) ^ t ^ (t >> 8);
+        int t3 = (int) (randseed[3] & 0xffffffffL);
+        randseed[3] = t3 ^ (t3 >> 19) ^ t ^ (t >> 8);
 
         double retV = ((double)randseed[3])/ (double)(1L << 31);
         return retV;
