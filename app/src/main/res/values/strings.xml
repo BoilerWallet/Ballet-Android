@@ -20,5 +20,17 @@
     <string name="when">When</string>
     <string name="erc20_tokens">ERC20 TOKENS</string>
     <string name="sender_receiver"><![CDATA[$SENDER$ -> $RECEIVER$]]></string>
+    <string name="select_your_favorite_new_account">Select your favorite new Account!</string>
+    <string name="reload">RELOAD</string>
+    <string name="create">Create</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="go">Go</string>
+    <string name="loading_">Loading ...</string>
+    <string name="hashing_pw_in_progress">Hashing your password for your own security</string>
+    <string name="set_password">Set Password</string>
+    <string name="wrong_pw_snackbar">Wrong password</string>
+    <string name="pws_not_matching_snackbar">Passwords do not match</string>
     <!-- Section End -->
 </resources>

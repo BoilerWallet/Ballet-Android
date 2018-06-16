@@ -1,14 +1,22 @@
 package com.boilertalk.ballet;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class NavigationActivity extends AppCompatActivity {
+import org.spongycastle.jcajce.provider.digest.Keccak;
+import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.WalletUtils;
+
+public class NavigationActivity extends AppCompatActivity implements AddWalletFragment.OnFragmentInteractionListener{
 
     private FrameLayout fragmentView;
 
@@ -40,8 +48,15 @@ public class NavigationActivity extends AppCompatActivity {
 
         fragmentView = findViewById(R.id.navigation_content_view);
 
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_wallet);
+
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        Log.d("MAIN", uri.toString());
+    }
 }
