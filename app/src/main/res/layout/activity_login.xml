@@ -37,7 +37,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColorHint="@color/light_text_secondary">
+                    app:hintTextAppearance="@style/TextinputLayout.HintText"
+                    android:theme="@style/TextinputLayout.Main">
 
                     <EditText
                         android:id="@+id/editText_pass"
@@ -47,8 +48,7 @@
                         android:hint="@string/enter_password"
                         android:inputType="textPassword"
                         android:textColor="@color/light_text_primary"
-                        android:textColorHint="@color/light_text_primary"
-                        android:backgroundTint="@color/light_text_primary"/>
+                        android:backgroundTint="@color/light_text_primary" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +56,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColorHint="@color/light_text_secondary">
+                    app:hintTextAppearance="@style/TextinputLayout.HintText"
+                    android:theme="@style/TextinputLayout.Main">
 
                     <EditText
                         android:id="@+id/editText_passconfirm"
@@ -66,7 +67,6 @@
                         android:hint="@string/confirm_password"
                         android:inputType="textPassword"
                         android:textColor="@color/light_text_primary"
-                        android:textColorHint="@color/light_text_primary"
                         android:backgroundTint="@color/light_text_primary"/>
 
                 </android.support.design.widget.TextInputLayout>

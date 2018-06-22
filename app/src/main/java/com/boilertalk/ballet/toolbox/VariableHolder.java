@@ -10,4 +10,5 @@ public class VariableHolder {
     public static void setPassword(String password) {
         VariableHolder.password = password;
     }
+
 }

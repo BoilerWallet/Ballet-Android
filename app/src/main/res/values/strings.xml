@@ -32,5 +32,7 @@
     <string name="set_password">Set Password</string>
     <string name="wrong_pw_snackbar">Wrong password</string>
     <string name="pws_not_matching_snackbar">Passwords do not match</string>
+    <string name="create_wallet_warn_no_wallet_selected">Please select a Wallet to continue.</string>
+    <string name="create_wallet_warn_no_name_entered">Please enter an name for your wallet.</string>
     <!-- Section End -->
 </resources>

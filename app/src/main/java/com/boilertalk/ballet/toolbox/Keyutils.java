@@ -21,8 +21,8 @@ public class Keyutils {
 
         Keccak.Digest256 kk256dg = new Keccak.Digest256();
         //Hex.toHexString(kk256dg.digest("abba".getBytes()));
-        kk256dg.digest(pks);
+        byte[] donepoop = kk256dg.digest(pks);
 
-        return ECKeyPair.create(pks);
+        return ECKeyPair.create(donepoop);
     }
 }

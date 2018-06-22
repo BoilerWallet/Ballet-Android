@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="New Account" />
+            android:hint="New Account" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
