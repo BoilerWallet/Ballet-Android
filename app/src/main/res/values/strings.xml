@@ -34,5 +34,9 @@
     <string name="pws_not_matching_snackbar">Passwords do not match</string>
     <string name="create_wallet_warn_no_wallet_selected">Please select a Wallet to continue.</string>
     <string name="create_wallet_warn_no_name_entered">Please enter an name for your wallet.</string>
+    <string name="checking_password">Checking password</string>
+    <string name="saving_wallet">Saving Wallet</string>
+    <string name="wallet_address">Wallet Address</string>
+    <string name="copied_address">Copied the address to the clipboard!</string>
     <!-- Section End -->
 </resources>

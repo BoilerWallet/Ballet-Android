@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    tools:context=".login.LoginActivity"
     android:background="@color/colorPrimary">
 
     <LinearLayout
@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="32dp">
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,28 +35,28 @@
                 android:layout_centerInParent="true">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/editText_pass_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     app:hintTextAppearance="@style/TextinputLayout.HintText"
-                    android:theme="@style/TextinputLayout.Main">
+                    android:theme="@style/TextinputLayout.Main"
+                    android:hint="@string/enter_password">
 
                     <EditText
                         android:id="@+id/editText_pass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/enter_password"
                         android:inputType="textPassword"
                         android:textColor="@color/light_text_primary"
-                        android:backgroundTint="@color/light_text_primary" />
+                        android:text=""
+                        android:importantForAutofill="no"/>
 
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     app:hintTextAppearance="@style/TextinputLayout.HintText"
                     android:theme="@style/TextinputLayout.Main">
 
@@ -67,7 +68,8 @@
                         android:hint="@string/confirm_password"
                         android:inputType="textPassword"
                         android:textColor="@color/light_text_primary"
-                        android:backgroundTint="@color/light_text_primary"/>
+                        android:text=""
+                        android:importantForAutofill="no"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -75,7 +77,6 @@
 
 
         </RelativeLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -88,12 +89,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
                 android:text="@string/go"
-                android:backgroundTint="@color/light_text_primary"
+                android:background="@drawable/background_light_button_press"
                 android:layout_centerInParent="true"/>
 
         </RelativeLayout>
-
-
 
     </LinearLayout>
 

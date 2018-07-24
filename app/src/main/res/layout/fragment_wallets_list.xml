@@ -5,13 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wallets_list_view"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:context=".WalletsListFragment"
-        tools:listitem="@layout/fragment_wallets_list_entry" />
+        android:id="@+id/wallets_list_refresher">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/wallets_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:context=".walletsList.WalletsListFragment"
+            tools:listitem="@layout/fragment_wallets_list_entry" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_wallet_button"

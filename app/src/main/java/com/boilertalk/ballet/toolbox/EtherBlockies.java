@@ -16,7 +16,7 @@ public class EtherBlockies {
 
 
     public EtherBlockies(char[] seed, int size, int scale) {
-        Log.d("SDEFTREE", "SEED: " + Arrays.toString(seed));
+        //Log.d("SDEFTREE", "SEED: " + Arrays.toString(seed));
         seedrand(seed);
 
         this.color = createColor();
@@ -58,8 +58,8 @@ public class EtherBlockies {
         hsl[1] = (float) ((rand() * 60) + 40)/100;
         hsl[2] = (float) ((rand()+rand()+rand()+rand()) * 25)/100;
 
-        Log.d("SSDDSEE", "H: " + Float.toString(hsl[0]) + ", S: " + Float.toString(hsl[1]) +
-                ", L: " + Float.toString(hsl[2]));
+        //Log.d("SSDDSEE", "H: " + Float.toString(hsl[0]) + ", S: " + Float.toString(hsl[1]) +
+        //        ", L: " + Float.toString(hsl[2]));
 
         return ColorUtils.HSLToColor(hsl);
     }

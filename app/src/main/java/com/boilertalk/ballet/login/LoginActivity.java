@@ -1,4 +1,4 @@
-package com.boilertalk.ballet;
+package com.boilertalk.ballet.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.boilertalk.ballet.navigation.NavigationActivity;
+import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 
@@ -42,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.editText_pass);
         passwordConfirmText = findViewById(R.id.editText_passconfirm);
         if(createPasswordMode) {
-            passwordText.setText(R.string.set_password);
+            ((TextInputLayout)findViewById(R.id.editText_pass_container)).setHint(getString(R.string.set_password));
         } else {
             passwordConfirmText.setVisibility(View.GONE);
         }
@@ -88,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     final Snackbar wpSnackbar = Snackbar.make(view, R.string.wrong_pw_snackbar,
                             Snackbar.LENGTH_SHORT);
                     final ProgressDialog pd = ProgressDialog.show(view.getContext(), getString(R
-                                    .string.loading_), "Checking password");
+                                    .string.loading_), getString(R.string.checking_password));
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {

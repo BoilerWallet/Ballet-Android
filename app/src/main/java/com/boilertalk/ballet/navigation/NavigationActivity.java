@@ -1,22 +1,21 @@
-package com.boilertalk.ballet;
+package com.boilertalk.ballet.navigation;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
-import org.spongycastle.jcajce.provider.digest.Keccak;
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.WalletUtils;
+import com.boilertalk.ballet.R;
+import com.boilertalk.ballet.walletsList.WalletsListFragment;
+import com.boilertalk.ballet.addWallet.AddWalletFragment;
+import com.boilertalk.ballet.walletDetails.WalletDetailsFragment;
 
-public class NavigationActivity extends AppCompatActivity implements AddWalletFragment.OnFragmentInteractionListener{
+public class NavigationActivity extends AppCompatActivity implements AddWalletFragment
+        .OnFragmentInteractionListener, WalletDetailsFragment.OnFragmentInteractionListener {
 
     private FrameLayout fragmentView;
 
