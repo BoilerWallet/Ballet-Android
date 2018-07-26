@@ -144,6 +144,8 @@ public class WalletDetailsFragment extends Fragment {
                                     .setText(getString(R.string.sender_receiver)
                                             .replace("$SENDER$", result.get(position).srcAddr)
                                             .replace("$RECEIVER$", result.get(position).dstAddr));
+                            ((TextView)holder.itemView.findViewById(R.id
+                                    .transaction_sender_receiver)).setSelected(true);
                         }
 
                         @Override
