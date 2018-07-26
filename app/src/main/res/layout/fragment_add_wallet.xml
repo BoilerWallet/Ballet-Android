@@ -9,8 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -18,12 +17,17 @@
             android:gravity="center_horizontal"
             android:text="@string/select_your_favorite_new_account"
             android:textSize="24sp"
-            android:layout_marginVertical="4dp"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp">
 
             <include layout="@layout/create_wallet_blockie"
                 android:id="@+id/create_wallet_blockie_1"
@@ -47,7 +51,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp">
 
             <include layout="@layout/create_wallet_blockie"
                 android:id="@+id/create_wallet_blockie_4"
@@ -70,43 +76,54 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/button_reload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/background_bordered_light_button_press"
-                android:text="@string/reload"/>
+                android:textColor="@color/colorAccent"
+                android:text="@string/reload"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
 
         </android.support.constraint.ConstraintLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Name of your new account:"/>
-
-        <EditText
-            android:id="@+id/add_wallet_input_name"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="New Account" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/add_wallet_input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Name of your new account:"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp">
 
             <Button
                 android:id="@+id/button_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="100dp"
                 app:layout_constraintRight_toRightOf="parent"
                 android:text="@string/create"
-                android:textColor="@color/light_text_secondary"
-                android:background="@drawable/background_accent_button_press" />
+                android:textColor="@color/light_text_primary"
+                android:theme="@style/DefaultRaisedButton"/>
 
 
         </android.support.constraint.ConstraintLayout>

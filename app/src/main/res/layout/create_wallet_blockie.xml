@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp"
+    android:padding="8dp"
     android:focusable="true"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground">
@@ -14,9 +14,11 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="false">
+        android:clickable="false"
+        android:layout_marginTop="8dp"
+        android:padding="12dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/create_wallet_blockie_img"
             app:layout_widthPercent="100%"
             app:layout_aspectRatio="100%"
@@ -32,6 +34,7 @@
         android:singleLine="true"
         android:gravity="center_horizontal"
         android:text="address"
-        android:clickable="false"/>
+        android:clickable="false"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

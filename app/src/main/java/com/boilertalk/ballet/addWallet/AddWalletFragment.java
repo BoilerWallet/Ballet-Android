@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,7 +57,7 @@ public class AddWalletFragment extends DialogFragment {
 
         Log.d("LOOL", "created!");
         final LinearLayout[] blockieContainers = new LinearLayout[6];
-        final CircleImageView[] blockies = new CircleImageView[6];
+        final ImageView[] blockies = new ImageView[6];
         final ECKeyPair[] genKeypairs = new ECKeyPair[6];
         final Credentials[] genCredentials = new Credentials[6];
         final EtherBlockies[] genEtherBlockies = new EtherBlockies[6];
