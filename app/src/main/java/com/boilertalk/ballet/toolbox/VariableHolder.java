@@ -1,7 +1,5 @@
 package com.boilertalk.ballet.toolbox;
 
-import com.boilertalk.ballet.toolbox.IDent.RTid;
-
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.http.HttpService;

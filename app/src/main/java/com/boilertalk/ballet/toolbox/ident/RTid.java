@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.toolbox.IDent;
+package com.boilertalk.ballet.toolbox.ident;
 
 //gives out runtime ids
 public class RTid {

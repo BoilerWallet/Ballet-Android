@@ -30,7 +30,7 @@ public class CustomApplication extends MultiDexApplication {
     private class MyMigration implements RealmMigration {
         @Override
         public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
-            realm.getSchema().get("com.boilertalk.ballet.RealmClasses.Wallet").addField("s_uuid",
+            realm.getSchema().get("com.boilertalk.ballet.database.Wallet").addField("s_uuid",
                     String.class, null);
         }
     }

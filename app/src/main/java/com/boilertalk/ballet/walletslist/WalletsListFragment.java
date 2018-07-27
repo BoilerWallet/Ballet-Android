@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.walletsList;
+package com.boilertalk.ballet.walletslist;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,9 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.boilertalk.ballet.R;
-import com.boilertalk.ballet.addWallet.AddWalletFragment;
-import com.boilertalk.ballet.realmClasses.Wallet;
-import com.boilertalk.ballet.walletDetails.WalletDetailsFragment;
+import com.boilertalk.ballet.addwallet.AddWalletFragment;
+import com.boilertalk.ballet.database.Wallet;
+import com.boilertalk.ballet.walletdetails.WalletDetailsFragment;
 import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;

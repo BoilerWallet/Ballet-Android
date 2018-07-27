@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.addWallet;
+package com.boilertalk.ballet.addwallet;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.boilertalk.ballet.R;
-import com.boilertalk.ballet.realmClasses.Wallet;
+import com.boilertalk.ballet.database.Wallet;
 import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
 import com.boilertalk.ballet.toolbox.Keyutils;
@@ -34,7 +34,6 @@ import org.web3j.crypto.WalletUtils;
 
 import java.io.IOException;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
 public class AddWalletFragment extends DialogFragment {

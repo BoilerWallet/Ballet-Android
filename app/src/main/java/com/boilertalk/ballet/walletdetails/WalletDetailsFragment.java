@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.walletDetails;
+package com.boilertalk.ballet.walletdetails;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.boilertalk.ballet.Etherscan.EtherscanAPI;
-import com.boilertalk.ballet.Etherscan.EtherscanTransaction;
+import com.boilertalk.ballet.networking.EtherscanAPI;
+import com.boilertalk.ballet.networking.EtherscanTransaction;
 import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;

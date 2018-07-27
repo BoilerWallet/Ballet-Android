@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            tools:context=".walletsList.WalletsListFragment"
+            tools:context=".walletslist.WalletsListFragment"
             tools:listitem="@layout/fragment_wallets_list_entry" />
 
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -10,9 +10,10 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.boilertalk.ballet.R;
-import com.boilertalk.ballet.walletsList.WalletsListFragment;
-import com.boilertalk.ballet.addWallet.AddWalletFragment;
-import com.boilertalk.ballet.walletDetails.WalletDetailsFragment;
+import com.boilertalk.ballet.walletslist.WalletsListFragment;
+import com.boilertalk.ballet.addwallet.AddWalletFragment;
+import com.boilertalk.ballet.walletdetails.WalletDetailsFragment;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class NavigationActivity extends AppCompatActivity implements AddWalletFragment
         .OnFragmentInteractionListener, WalletDetailsFragment.OnFragmentInteractionListener {
@@ -48,10 +49,15 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
         fragmentView = findViewById(R.id.navigation_content_view);
 
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationViewEx navigation = (BottomNavigationViewEx) findViewById(R.id.navigation);
+
+        // Custom options
+        navigation.enableItemShiftingMode(false);
+        navigation.enableShiftingMode(false);
+        navigation.enableAnimation(false);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_wallet);
-
     }
 
     @Override

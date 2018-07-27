@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.Etherscan;
+package com.boilertalk.ballet.networking;
 
 public class EtherscanTransaction {
     public String srcAddr;
