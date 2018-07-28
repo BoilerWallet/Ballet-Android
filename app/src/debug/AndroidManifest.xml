@@ -4,8 +4,8 @@
     package="com.boilertalk.ballet">
 
     <application
-        android:icon="@mipmap/ic_cirno"
-        android:roundIcon="@mipmap/ic_cirno_round"
+        android:icon="@mipmap/ic_ballet"
+        android:roundIcon="@mipmap/ic_ballet_round"
         tools:replace="android:icon,android:roundIcon">
     </application>
 

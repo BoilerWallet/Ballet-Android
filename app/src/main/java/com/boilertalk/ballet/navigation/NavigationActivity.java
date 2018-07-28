@@ -4,6 +4,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,16 +18,76 @@ import com.boilertalk.ballet.addwallet.AddWalletFragment;
 import com.boilertalk.ballet.walletdetails.WalletDetailsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class NavigationActivity extends AppCompatActivity implements AddWalletFragment
         .OnFragmentInteractionListener, WalletDetailsFragment.OnFragmentInteractionListener {
 
-    private FrameLayout fragmentView;
+    // The FrameLayout holding the fragments
+    @BindView(R.id.navigation_content_view) FrameLayout fragmentView;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    // The navigation bar
+    @BindView(R.id.navigation) BottomNavigationViewEx bottomNavigationView;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            /*
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            Fragment curFrag = fragmentManager.getPrimaryNavigationFragment();
+            if (curFrag != null) {
+                fragmentTransaction.detach(curFrag);
+            }
+
+            String tag;
+            switch (item.getItemId()) {
+                case R.id.navigation_wallet:
+                    tag = "NAVIGATION_WALLET";
+                    break;
+                case R.id.navigation_send:
+                    tag = "NAVIGATION_SEND";
+                    break;
+                case R.id.navigation_receive:
+                    tag = "NAVIGATION_RECEIVE";
+                    break;
+                case R.id.navigation_settings:
+                    tag = "NAVIGATION_SETTINGS";
+                    break;
+                default:
+                    return false;
+            }
+            Fragment fragment = fragmentManager.findFragmentByTag(tag);
+
+            if (fragment == null) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_wallet:
+                        fragment = new WalletsListFragment();
+                        break;
+                    case R.id.navigation_send:
+                        break;
+                    case R.id.navigation_receive:
+                        break;
+                    case R.id.navigation_settings:
+                        break;
+                }
+                fragmentTransaction.add(item.getItemId(), fragment, tag);
+            } else {
+                fragmentTransaction.attach(fragment);
+            }
+
+            fragmentTransaction.setPrimaryNavigationFragment(fragment);
+            fragmentTransaction.setReorderingAllowed(true);
+            fragmentTransaction.commitNowAllowingStateLoss();
+
+            // ---
+
+            return true;
+            */
             switch (item.getItemId()) {
                 case R.id.navigation_wallet:
                     getSupportFragmentManager().beginTransaction().add(R.id
@@ -45,19 +108,15 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
-        fragmentView = findViewById(R.id.navigation_content_view);
-
-
-        BottomNavigationViewEx navigation = (BottomNavigationViewEx) findViewById(R.id.navigation);
+        ButterKnife.bind(this);
 
         // Custom options
-        navigation.enableItemShiftingMode(false);
-        navigation.enableShiftingMode(false);
-        navigation.enableAnimation(false);
+        bottomNavigationView.enableItemShiftingMode(false);
+        bottomNavigationView.enableShiftingMode(false);
+        bottomNavigationView.enableAnimation(false);
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.navigation_wallet);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_wallet);
     }
 
     @Override
