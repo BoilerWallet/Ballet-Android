@@ -88,18 +88,29 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
 
             return true;
             */
+
+            Fragment fragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_wallet:
-                    getSupportFragmentManager().beginTransaction().add(R.id
-                            .navigation_content_view, new WalletsListFragment()).commit();
-                    return true;
+                    fragment = new WalletsListFragment();
+                    break;
                 case R.id.navigation_send:
-                    return true;
+                    break;
                 case R.id.navigation_receive:
-                    return true;
+                    break;
                 case R.id.navigation_settings:
-                    return true;
+                    break;
             }
+
+            if (fragment != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.navigation_content_view, fragment)
+                        .commit();
+                return true;
+            }
+
             return false;
         }
     };
