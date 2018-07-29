@@ -40,7 +40,7 @@
         android:paddingHorizontal="4dp"
         android:layout_weight="2"
         android:gravity="center_vertical"
-        android:text="@string/balance_eth"
+        android:text="@string/balance_eth_default"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:scrollHorizontally="true"/>

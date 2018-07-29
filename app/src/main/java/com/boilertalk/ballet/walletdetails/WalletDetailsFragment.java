@@ -113,8 +113,8 @@ public class WalletDetailsFragment extends Fragment {
                 }
                 @Override
                 protected void onPostExecute(Object o) {
-                    balv.setText(balv.getText().toString().replace("$BALANCE$",
-                            balanceStr));
+                    String balanceTemplate = getString(R.string.balance_eth_template);
+                    balv.setText(balanceTemplate.replace("$BALANCE$", balanceStr));
                 }
             }.execute(null, null, null);
 

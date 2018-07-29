@@ -62,7 +62,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="16dp"
                             android:gravity="center"
-                            android:text="@string/balance_eth" />
+                            android:text="@string/balance_eth_default" />
 
                     </LinearLayout>
 
