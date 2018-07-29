@@ -152,10 +152,10 @@ public class WalletsListFragment extends Fragment {
                     LoadWalletParams param = params[0];
 
                     VariableHolder.LoadedWallet lw;
-                    if((lw = VariableHolder.getWalletAt(param.walletUuid)) == null) {
+                    if((lw = VariableHolder.getInstance().getWalletAt(param.walletUuid)) == null) {
                         try {
                             credentials = WalletUtils.loadCredentials(
-                                    VariableHolder.getPassword(),
+                                    VariableHolder.getInstance().getPassword(),
                                     param.walletSource
                             );
                         } catch (IOException e) {
@@ -175,7 +175,7 @@ public class WalletsListFragment extends Fragment {
                         final VariableHolder.LoadedWallet loadedWallet = new VariableHolder.LoadedWallet(credentials, walletName);
 
                         // Save loaded wallet
-                        VariableHolder.putWallet(walletUuid, loadedWallet);
+                        VariableHolder.getInstance().putWallet(walletUuid, loadedWallet);
 
                         // Create blockies
                         EtherBlockies blockies = new EtherBlockies(credentials.getAddress().toCharArray(),
@@ -211,9 +211,10 @@ public class WalletsListFragment extends Fragment {
                             BigInteger balance = BigInteger.ZERO;
                             SSLHelper.initializeSSLContext(getContext());
                             try {
-                                balance = VariableHolder.getWeb3j().ethGetBalance(credentials
-                                                .getAddress(),
-                                        DefaultBlockParameterName.LATEST).send().getBalance();
+                                balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(
+                                        credentials.getAddress(),
+                                        DefaultBlockParameterName.LATEST
+                                ).send().getBalance();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

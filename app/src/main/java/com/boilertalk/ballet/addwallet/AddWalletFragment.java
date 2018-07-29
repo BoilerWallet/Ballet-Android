@@ -161,7 +161,7 @@ public class AddWalletFragment extends DialogFragment {
                                 String interesting = null;
                                 try {
                                     interesting = WalletUtils.generateWalletFile(VariableHolder
-                                                    .getPassword(), genKeypairs[(int)selectedContainer.getTag()],
+                                                    .getInstance().getPassword(), genKeypairs[(int)selectedContainer.getTag()],
                                             getContext().getDir(ConstantHolder.WALETFILES_FOLDER,
                                                     Context.MODE_PRIVATE),
                                             false);

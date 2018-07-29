@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                                             .SHPREF_PASSHASH_KEY, null),
                                     passwordText.getText().toString().toCharArray())) {
                                 //correct
-                                VariableHolder.setPassword(passwordText.getText().toString());
+                                VariableHolder.getInstance().setPassword(passwordText.getText().toString());
                                 pd.dismiss();
                                 Intent navPageIntent = new Intent(getApplicationContext(), NavigationActivity.class);
                                 startActivity(navPageIntent);

@@ -67,7 +67,7 @@ public class WalletDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lw = VariableHolder.getWalletAt(walletId);
+        lw = VariableHolder.getInstance().getWalletAt(walletId);
         balv = view.findViewById(R.id.wallet_details_balance);
 
         if(lw != null) {
@@ -101,7 +101,7 @@ public class WalletDetailsFragment extends Fragment {
                     BigInteger balance = BigInteger.ZERO;
                     SSLHelper.initializeSSLContext(getContext());
                     try {
-                        balance = VariableHolder.getWeb3j().ethGetBalance(lw.getCredentials()
+                        balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(lw.getCredentials()
                                         .getAddress(),
                                 DefaultBlockParameterName.LATEST).send().getBalance();
                     } catch (IOException e) {
