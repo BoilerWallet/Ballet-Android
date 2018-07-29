@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -17,6 +19,8 @@ import com.boilertalk.ballet.walletslist.WalletsListFragment;
 import com.boilertalk.ballet.addwallet.AddWalletFragment;
 import com.boilertalk.ballet.walletdetails.WalletDetailsFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,38 +34,16 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
     // The navigation bar
     @BindView(R.id.navigation) BottomNavigationViewEx bottomNavigationView;
 
+    // Cache fragments
+    private SparseArray<Fragment> cachedFragments = new SparseArray<Fragment>();
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            /*
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = null;
 
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            Fragment curFrag = fragmentManager.getPrimaryNavigationFragment();
-            if (curFrag != null) {
-                fragmentTransaction.detach(curFrag);
-            }
-
-            String tag;
-            switch (item.getItemId()) {
-                case R.id.navigation_wallet:
-                    tag = "NAVIGATION_WALLET";
-                    break;
-                case R.id.navigation_send:
-                    tag = "NAVIGATION_SEND";
-                    break;
-                case R.id.navigation_receive:
-                    tag = "NAVIGATION_RECEIVE";
-                    break;
-                case R.id.navigation_settings:
-                    tag = "NAVIGATION_SETTINGS";
-                    break;
-                default:
-                    return false;
-            }
-            Fragment fragment = fragmentManager.findFragmentByTag(tag);
+            fragment = cachedFragments.get(item.getItemId());
 
             if (fragment == null) {
                 switch (item.getItemId()) {
@@ -75,33 +57,9 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
                     case R.id.navigation_settings:
                         break;
                 }
-                fragmentTransaction.add(item.getItemId(), fragment, tag);
-            } else {
-                fragmentTransaction.attach(fragment);
             }
 
-            fragmentTransaction.setPrimaryNavigationFragment(fragment);
-            fragmentTransaction.setReorderingAllowed(true);
-            fragmentTransaction.commitNowAllowingStateLoss();
-
-            // ---
-
-            return true;
-            */
-
-            Fragment fragment = null;
-
-            switch (item.getItemId()) {
-                case R.id.navigation_wallet:
-                    fragment = new WalletsListFragment();
-                    break;
-                case R.id.navigation_send:
-                    break;
-                case R.id.navigation_receive:
-                    break;
-                case R.id.navigation_settings:
-                    break;
-            }
+            cachedFragments.put(item.getItemId(), fragment);
 
             if (fragment != null) {
                 getSupportFragmentManager()
