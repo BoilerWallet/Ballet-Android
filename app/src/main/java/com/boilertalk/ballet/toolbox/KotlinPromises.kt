@@ -32,3 +32,9 @@ object PromiseLike {
 
     fun <T> of(deferred: Promise<T>): Promise<T> = deferred
 }
+
+fun <T> firstly(block: suspend CoroutineScope.() -> T): Promise<T> = async {
+    block.invoke(this)
+}
+
+fun <T> firstly(block: () -> Promise<T>): Promise<T> = block.invoke()
