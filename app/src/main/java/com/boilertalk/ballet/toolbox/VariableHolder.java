@@ -6,6 +6,7 @@ import com.boilertalk.ballet.database.Wallet;
 
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
@@ -64,7 +65,7 @@ public class VariableHolder {
             }
             Wallet innerWallet = params[0];
 
-            String source = keystorePath + "/" + wallet.getWalletFileName();
+            String source = keystorePath;
             try {
                 Credentials credentials = WalletUtils.loadCredentials(
                         VariableHolder.getInstance().getPassword(),
@@ -103,6 +104,14 @@ public class VariableHolder {
 
         public Wallet getWallet() {
             return wallet;
+        }
+
+        public EtherBlockies etherBlockies(int size, int scale) {
+            return new EtherBlockies(credentials.getAddress().toCharArray(), size, scale);
+        }
+
+        public String checksumAddress() {
+            return Keys.toChecksumAddress(credentials.getAddress());
         }
     }
 }
