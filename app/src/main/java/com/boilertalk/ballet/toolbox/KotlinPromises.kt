@@ -4,6 +4,7 @@ import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import java.lang.Exception
 
 // Async awaits
 suspend fun <T> CoroutineScope.await(block: () -> Deferred<T>): T = block().await()
@@ -38,3 +39,13 @@ fun <T> firstly(block: suspend CoroutineScope.() -> T): Promise<T> = async {
 }
 
 fun <T> firstly(block: () -> Promise<T>): Promise<T> = block.invoke()
+
+// Catch, currently only possible as a final Promise chain element
+
+fun <T> Promise<T>.catch(handler: (Exception) -> Unit) = async(UI) {
+    try {
+        this@catch.await()
+    } catch (e: Exception) {
+        handler.invoke(e)
+    }
+}
