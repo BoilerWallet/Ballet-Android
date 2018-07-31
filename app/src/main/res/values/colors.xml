@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Default Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
     <!-- Own palette -->
     <color name="colorPrimary">@color/cyan500</color>
     <color name="colorPrimaryDark">@color/cyan600</color>

@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.realmClasses;
+package com.boilertalk.ballet.database;
 
 import java.util.UUID;
 
