@@ -82,7 +82,6 @@ public class WalletsListFragment extends Fragment {
             }
         });
 
-
         addWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,61 +140,25 @@ public class WalletsListFragment extends Fragment {
                 final RecyclerView.ViewHolder holder_f = holder;
 
                 String walletSource = getContext().getDir(ConstantHolder.WALETFILES_FOLDER, Context.MODE_PRIVATE).getAbsolutePath() + "/" + wallet.getWalletFileName();
-                VariableHolder.getInstance().getLoadedWallet(walletSource, wallet, (loadedWallet) -> {
-                    if (loadedWallet == null) {
-                        Log.d("LDEN", "lol isnull gg ez win nubs plz deinstall");
-                        return;
-                    }
-
-                    // Create blockies
-                    EtherBlockies blockies = loadedWallet.etherBlockies(8, 4);
-                    //TODO: scale for correct dp only
-                    Bitmap blockiebmp = Bitmap.createScaledBitmap(
-                            blockies.getBitmap(),
-                            ConvertHelper.dpToPixels(56, getResources()), ConvertHelper.dpToPixels(56, getResources()),
-                            false
-                    );
-
-                    // Set values
-                    ((CircleImageView) holder_f.itemView.findViewById(R.id.blocky_image)).setVisibility(View.VISIBLE);
-                    pb.setVisibility(View.GONE);
-
-                    ((CircleImageView) holder_f.itemView.findViewById(R.id.blocky_image)).setImageBitmap(blockiebmp);
-
-                    ((TextView) holder_f.itemView.findViewById(R.id.wallet_address)).setText(loadedWallet.checksumAddress());
-
-                    holder_f.itemView.setOnClickListener((view) -> {
-                        WalletDetailsFragment walletDetailsFragment = new WalletDetailsFragment();
-                        walletDetailsFragment.setWallet(wallet);
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.navigation_content_view, walletDetailsFragment)
-                                .addToBackStack(null).commit();
-                    });
-
-                    //set the balance text views
-                    final TextView balv = holder_f.itemView.findViewById(R.id.wallet_balance);
-
-                    GeneralAsyncTask<Object, String> getBalanceTask = new GeneralAsyncTask<>();
-                    getBalanceTask.setBackgroundCompletion((params) -> {
-                        BigInteger balance = BigInteger.ZERO;
-                        SSLHelper.initializeSSLContext(getContext());
-                        try {
-                            balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(
-                                    loadedWallet.getCredentials().getAddress(),
-                                    DefaultBlockParameterName.LATEST
-                            ).send().getBalance();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                if(wallet.getAddress() == null || wallet.getAddress().equals("")) {
+                    //if the realm is missing the address we put it in here
+                    VariableHolder.getInstance().getLoadedWallet(walletSource, wallet, (loadedWallet) -> {
+                        if (loadedWallet == null) {
+                            Log.d("LDEN", "lol isnull gg ez win nubs plz deinstall");
+                            return;
                         }
-                        return Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
-                    });
-                    getBalanceTask.setPostExecuteCompletion((result) -> {
-                        String balanceTemplate = getString(R.string.balance_eth_template);
-                        balv.setText(balanceTemplate.replace("$BALANCE$", result));
-                    });
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        //things in realm
+                        wallet.setAddress(loadedWallet.getCredentials().getAddress());
+                        //done with realm
+                        realm.commitTransaction();
 
-                    getBalanceTask.execute();
-                });
+                        setViews(holder_f, wallet, pb);
+                    });
+                } else {
+                    setViews(holder_f, wallet, pb);
+                }
             }
 
             @Override
@@ -205,5 +168,56 @@ public class WalletsListFragment extends Fragment {
         }
 
         walletsListRecycler.setAdapter(new WLRA());
+    }
+
+    private void setViews(RecyclerView.ViewHolder holder, Wallet wallet, ProgressBar pb) {
+        // Create blockies
+        EtherBlockies blockies = wallet.etherBlockies(8, 4);
+        Bitmap blockiebmp = Bitmap.createScaledBitmap(
+                blockies.getBitmap(),
+                ConvertHelper.dpToPixels(56, getResources()), ConvertHelper.dpToPixels(56, getResources()),
+                false
+        );
+
+        // Set values
+        ((CircleImageView) holder.itemView.findViewById(R.id.blocky_image)).setVisibility(View.VISIBLE);
+        pb.setVisibility(View.GONE);
+
+        ((CircleImageView) holder.itemView.findViewById(R.id.blocky_image)).setImageBitmap(blockiebmp);
+
+        ((TextView) holder.itemView.findViewById(R.id.wallet_address)).setText(wallet.checksumAddress());
+
+        holder.itemView.setOnClickListener((view) -> {
+            WalletDetailsFragment walletDetailsFragment = new WalletDetailsFragment();
+            walletDetailsFragment.setWallet(wallet);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.navigation_content_view, walletDetailsFragment)
+                    .addToBackStack(null).commit();
+        });
+
+        //set the balance text views
+        final TextView balv = holder.itemView.findViewById(R.id.wallet_balance);
+
+        final String address = wallet.getAddress();
+        GeneralAsyncTask<Object, String> getBalanceTask = new GeneralAsyncTask<>();
+        getBalanceTask.setBackgroundCompletion((params) -> {
+            BigInteger balance = BigInteger.ZERO;
+            SSLHelper.initializeSSLContext(getContext());
+            try {
+                balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(
+                        address,
+                        DefaultBlockParameterName.LATEST
+                ).send().getBalance();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
+        });
+        getBalanceTask.setPostExecuteCompletion((result) -> {
+            String balanceTemplate = getString(R.string.balance_eth_template);
+            balv.setText(balanceTemplate.replace("$BALANCE$", result));
+        });
+
+        getBalanceTask.execute();
     }
 }

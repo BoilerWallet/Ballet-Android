@@ -1,5 +1,9 @@
 package com.boilertalk.ballet.database;
 
+import com.boilertalk.ballet.toolbox.EtherBlockies;
+
+import org.web3j.crypto.Keys;
+
 import java.util.UUID;
 
 import io.realm.RealmObject;
@@ -8,6 +12,7 @@ public class Wallet extends RealmObject {
     private String WalletFileName;
     private String WalletName;
     private String s_uuid;
+    private String address;
 
     public Wallet() {
         s_uuid = UUID.randomUUID().toString();
@@ -36,5 +41,21 @@ public class Wallet extends RealmObject {
             getRealm().commitTransaction();
         }
         return UUID.fromString(s_uuid);
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String checksumAddress() {
+        return Keys.toChecksumAddress(address);
+    }
+
+    public EtherBlockies etherBlockies(int size, int scale) {
+        return new EtherBlockies(address.toCharArray(), size, scale);
     }
 }

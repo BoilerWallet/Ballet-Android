@@ -28,6 +28,7 @@ import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
 import com.boilertalk.ballet.toolbox.GeneralAsyncTask;
+import com.boilertalk.ballet.toolbox.LimitedBigDecimalString;
 import com.boilertalk.ballet.toolbox.SSLHelper;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.toolbox.iResult;
@@ -40,6 +41,7 @@ import org.web3j.utils.Convert;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -75,51 +77,49 @@ public class WalletDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         balv = view.findViewById(R.id.wallet_details_balance);
 
-        String walletSource = getContext().getDir(ConstantHolder.WALETFILES_FOLDER, Context.MODE_PRIVATE).getAbsolutePath() + "/" + wallet.getWalletFileName();
-        VariableHolder.getInstance().getLoadedWallet(walletSource, wallet, (loadedWallet) -> {
-            if (loadedWallet == null) {
-                // TODO: Error handling
-                return;
+        ((TextView) view.findViewById(R.id.wallet_details_name)).setText(wallet.getWalletName());
+        ((TextView) view.findViewById(R.id.wallet_details_address)).setText(Keys.toChecksumAddress(wallet.checksumAddress()));
+        ((Button) view.findViewById(R.id.wallet_details_copyaddress)).setOnClickListener(view1 -> {
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(getString(R.string.wallet_address), Keys.toChecksumAddress(wallet.checksumAddress()));
+            clipboard.setPrimaryClip(clip);
+            Snackbar.make(view1, R.string.copied_address, Snackbar.LENGTH_SHORT).show();
+        });
+
+        EtherBlockies eb = wallet.etherBlockies(8, 4);
+        Bitmap scaledBlockie = Bitmap.createScaledBitmap(
+                eb.getBitmap(),
+                ConvertHelper.dpToPixels(80, getResources()), ConvertHelper.dpToPixels(80, getResources()),
+                false
+        );
+        ((CircleImageView) view.findViewById(R.id.wallet_details_blockie)).setImageBitmap(scaledBlockie);
+
+        //get the balance
+
+        GeneralAsyncTask<String, String> asyncTask = new GeneralAsyncTask<>();
+        asyncTask.setBackgroundCompletion((params) -> {
+            if (params.length < 1) {
+                return null;
             }
+            String address = params[0];
 
-            ((TextView)view.findViewById(R.id.wallet_details_name)).setText(loadedWallet.getWallet().getWalletName());
-            ((TextView)view.findViewById(R.id.wallet_details_address)).setText(Keys.toChecksumAddress(loadedWallet.checksumAddress()));
-            ((Button)view.findViewById(R.id.wallet_details_copyaddress)).setOnClickListener(view1 -> {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.wallet_address), Keys.toChecksumAddress(loadedWallet.checksumAddress()));
-                clipboard.setPrimaryClip(clip);
-                Snackbar.make(view1, R.string.copied_address, Snackbar.LENGTH_SHORT).show();
-            });
+            BigInteger balance = BigInteger.ZERO;
+            SSLHelper.initializeSSLContext(getContext());
+            try {
+                balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
+        });
+        asyncTask.setPostExecuteCompletion((balance) -> {
+            String balanceTemplate = getString(R.string.balance_eth_template);
+            balv.setText(balanceTemplate.replace("$BALANCE$", balance));
+        });
+        asyncTask.execute(wallet.getAddress());
 
-            EtherBlockies eb = loadedWallet.etherBlockies(8, 4);
-            Bitmap scaledBlockie = Bitmap.createScaledBitmap(
-                    eb.getBitmap(),
-                    ConvertHelper.dpToPixels(80, getResources()), ConvertHelper.dpToPixels(80, getResources()),
-                    false
-            );
-            ((CircleImageView)view.findViewById(R.id.wallet_details_blockie)).setImageBitmap(scaledBlockie);
-
-            //get the balance
-
-            GeneralAsyncTask<String, String> asyncTask = new GeneralAsyncTask<>();
-            asyncTask.setBackgroundCompletion((params) -> {
-                if (params.length < 1) {
-                    return null;
-                }
-                String address = params[0];
-
-                BigInteger balance = BigInteger.ZERO;
-                SSLHelper.initializeSSLContext(getContext());
-                try {
-                    balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
-            });
-
-            // TODO: @simon_artner pls change to GeneralAsyncTask and use params and result generics...
-            new AsyncTask<Object, Object, Object>() {
+        // TODO: @simon_artner pls change to GeneralAsyncTask and use params and result generics...
+            /*new AsyncTask<Object, Object, Object>() {
                 String balanceStr = null;
                 @Override
                 protected Object doInBackground(Object[] objects) {
@@ -140,91 +140,89 @@ public class WalletDetailsFragment extends Fragment {
                     String balanceTemplate = getString(R.string.balance_eth_template);
                     balv.setText(balanceTemplate.replace("$BALANCE$", balanceStr));
                 }
-            }.execute(null, null, null);
+            }.execute(null, null, null);*/
 
-            final RecyclerView thr = view.findViewById(R.id.wallet_details_transactions);
+        final RecyclerView thr = view.findViewById(R.id.wallet_details_transactions);
 
-            EtherscanAPI esa = new EtherscanAPI(loadedWallet.getCredentials().getAddress(), 20);
-            esa.async_getNextPage(new iResult<ArrayList<EtherscanTransaction>>() {
-                @Override
-                public void onResult(final ArrayList<EtherscanTransaction> result) {
-                    //final ArrayList<EtherscanTransaction> f_result = result;
-                    Log.d("AAAA", "resilt " + Integer.toString(result.size()));
-                    thr.setAdapter(new RecyclerView.Adapter() {
-                        @Override
-                        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                            Context context = parent.getContext();
-                            LayoutInflater inflater = LayoutInflater.from(context);
+        EtherscanAPI esa = new EtherscanAPI(wallet.getAddress(), 20);
+        esa.async_getNextPage(new iResult<ArrayList<EtherscanTransaction>>() {
+            @Override
+            public void onResult(final ArrayList<EtherscanTransaction> result) {
+                //final ArrayList<EtherscanTransaction> f_result = result;
+                Log.d("AAAA", "resilt " + Integer.toString(result.size()));
+                thr.setAdapter(new RecyclerView.Adapter() {
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        Context context = parent.getContext();
+                        LayoutInflater inflater = LayoutInflater.from(context);
 
-                            View holded = inflater.inflate(R.layout.transaction_history_entry, parent,
-                                    false);
-                            return new RecyclerView.ViewHolder(holded) {};
+                        View holded = inflater.inflate(R.layout.transaction_history_entry, parent,
+                                false);
+                        return new RecyclerView.ViewHolder(holded) {
+                        };
+                    }
+
+                    @Override
+                    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                        boolean fromself = false, toself = false;
+                        TextView fromTo = ((TextView) holder.itemView
+                                .findViewById(R.id.transaction_sender_receiver));
+                        TextView balance = ((TextView) holder.itemView
+                                .findViewById(R.id.transaction_balance));
+                        ImageView icon = ((ImageView) holder.itemView
+                                .findViewById(R.id.transaction_type_img));
+                        RelativeTimeTextView txtimeView = ((RelativeTimeTextView) holder.itemView
+                                .findViewById(R.id.transaction_time));
+                        EtherscanTransaction etx = result.get(position);
+
+                        if (etx.dstAddr.equalsIgnoreCase(wallet.getAddress())) {
+                            toself = true;
+                        }
+                        if (etx.srcAddr.equalsIgnoreCase(wallet.getAddress())) {
+                            fromself = true;
+                        }
+                        fromTo.setText(getString(R.string.sender_receiver)
+                                .replace("$SENDER$",
+                                        toself ? getString(R.string.self) :
+                                                etx.srcAddr)
+                                .replace("$RECEIVER$",
+                                        fromself ? getString(R.string.self) :
+                                                etx.dstAddr));
+                        fromTo.setSelected(true);
+
+                        if (fromself == true && toself == false) {
+                            icon.setImageResource(R.drawable.ic_arrow_upward);
+                            icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
+                                            .red500),
+                                    PorterDuff.Mode.SRC_ATOP);
+                        } else if (fromself == false && toself == true) {
+                            icon.setImageResource(R.drawable.ic_arrow_downward);
+                            icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
+                                            .green500),
+                                    PorterDuff.Mode.SRC_ATOP);
+                        } else if (fromself == true && toself == true) {
+                            icon.setImageResource(R.drawable.ic_selftoself_transaction);
+                            icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
+                                            .colorPrimary),
+                                    PorterDuff.Mode.SRC_ATOP);
                         }
 
-                        @Override
-                        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                            boolean fromself = false, toself = false;
-                            TextView fromTo = ((TextView)holder.itemView
-                                    .findViewById(R.id.transaction_sender_receiver));
-                            TextView balance = ((TextView)holder.itemView
-                                    .findViewById(R.id.transaction_balance));
-                            ImageView icon = ((ImageView)holder.itemView
-                                    .findViewById(R.id.transaction_type_img));
-                            RelativeTimeTextView txtimeView = ((RelativeTimeTextView)holder.itemView
-                                    .findViewById(R.id.transaction_time));
-                            EtherscanTransaction etx = result.get(position);
+                        String balanceStr = LimitedBigDecimalString.createString(6,
+                                Convert.fromWei(Long.toString(etx.value), Convert.Unit.ETHER));
+                        balance.setText(getString(R.string.balance_eth_template)
+                                .replace("$BALANCE$", balanceStr));
 
-                            if(etx.dstAddr.equalsIgnoreCase(loadedWallet.getCredentials().getAddress())) {
-                                toself = true;
-                            }
-                            if(etx.srcAddr.equalsIgnoreCase(loadedWallet.getCredentials().getAddress())) {
-                                fromself = true;
-                            }
-                            fromTo.setText(getString(R.string.sender_receiver)
-                                            .replace("$SENDER$",
-                                                    toself ? getString(R.string.self) :
-                                                            etx.srcAddr)
-                                            .replace("$RECEIVER$",
-                                                    fromself ? getString(R.string.self) :
-                                                            etx.dstAddr));
-                            fromTo.setSelected(true);
+                        txtimeView.setReferenceTime(new Date().getTime());
+                        Log.d("TIMES", "TAMP " + Long.toString(etx.timestamp));
+                    }
 
-                            if(fromself == true && toself == false) {
-                                icon.setImageResource(R.drawable.ic_arrow_upward);
-                                icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
-                                                .red500),
-                                        PorterDuff.Mode.SRC_ATOP);
-                            } else if(fromself == false && toself == true) {
-                                icon.setImageResource(R.drawable.ic_arrow_downward);
-                                icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
-                                                .green500),
-                                        PorterDuff.Mode.SRC_ATOP);
-                            } else if(fromself == true && toself == true) {
-                                icon.setImageResource(R.drawable.ic_selftoself_transaction);
-                                icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
-                                                .colorPrimary),
-                                        PorterDuff.Mode.SRC_ATOP);
-                            }
+                    @Override
+                    public int getItemCount() {
+                        return result.size();
+                    }
+                });
 
-                            String balanceStr = Convert.fromWei(Long.toString(result.get(position).value),
-                                    Convert.Unit.ETHER).toString();
-
-                            //TODO round too long values
-                            balance.setText(getString(R.string.balance_eth_default)
-                                            .replace("$BALANCE$", balanceStr));
-
-                            txtimeView.setReferenceTime(etx.timestamp);
-                            Log.d("TIMES", "TAMP " + Long.toString(etx.timestamp));
-                        }
-
-                        @Override
-                        public int getItemCount() {
-                            return result.size();
-                        }
-                    });
-
-                }
-            });
+            }
         });
     }
 

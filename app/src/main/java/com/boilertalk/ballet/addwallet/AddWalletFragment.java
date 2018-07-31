@@ -178,6 +178,8 @@ public class AddWalletFragment extends DialogFragment {
                                 Wallet wallet = realm.createObject(Wallet.class);
                                 wallet.setWalletFileName(interesting);
                                 wallet.setWalletName(walletNameInput.getText().toString());
+                                wallet.setAddress(genCredentials[(int)selectedContainer.getTag()]
+                                        .getAddress());
                                 //done with realm
                                 realm.commitTransaction();
 
