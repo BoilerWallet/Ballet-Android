@@ -1,4 +1,4 @@
-package com.boilertalk.ballet.walletDetails;
+package com.boilertalk.ballet.walletdetails;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -17,11 +17,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.boilertalk.ballet.Etherscan.EtherscanAPI;
-import com.boilertalk.ballet.Etherscan.EtherscanTransaction;
+import com.boilertalk.ballet.database.Wallet;
+import com.boilertalk.ballet.networking.EtherscanAPI;
+import com.boilertalk.ballet.networking.EtherscanTransaction;
 import com.boilertalk.ballet.R;
+import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
+import com.boilertalk.ballet.toolbox.GeneralAsyncTask;
 import com.boilertalk.ballet.toolbox.SSLHelper;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.toolbox.iResult;
@@ -40,16 +43,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class WalletDetailsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
-    private UUID walletId = null;
-    private VariableHolder.LoadedWallet lw = null;
+    private Wallet wallet = null;
     private TextView balv;
 
     public WalletDetailsFragment() {
         // Required empty public constructor
     }
 
-    public void setUuid(UUID walletId) {
-        this.walletId = walletId;
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     @Override
@@ -67,33 +69,52 @@ public class WalletDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lw = VariableHolder.getWalletAt(walletId);
         balv = view.findViewById(R.id.wallet_details_balance);
 
-        if(lw != null) {
-            ((TextView)view.findViewById(R.id.wallet_details_name)).setText(lw.name);
-            ((TextView)view.findViewById(R.id.wallet_details_address)).setText(Keys.toChecksumAddress(lw
-                    .getCredentials().getAddress()));
-            ((Button)view.findViewById(R.id.wallet_details_copyaddress)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService
-                            (Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText(getString(R.string.wallet_address), Keys.toChecksumAddress(lw
-                            .getCredentials().getAddress()));
-                    clipboard.setPrimaryClip(clip);
-                    Snackbar.make(view, R.string.copied_address, Snackbar
-                            .LENGTH_SHORT).show();
-                }
+        String walletSource = getContext().getDir(ConstantHolder.WALETFILES_FOLDER, Context.MODE_PRIVATE).getAbsolutePath() + "/" + wallet.getWalletFileName();
+        VariableHolder.getInstance().getLoadedWallet(walletSource, wallet, (loadedWallet) -> {
+            if (loadedWallet == null) {
+                // TODO: Error handling
+                return;
+            }
+
+            ((TextView)view.findViewById(R.id.wallet_details_name)).setText(loadedWallet.getWallet().getWalletName());
+            ((TextView)view.findViewById(R.id.wallet_details_address)).setText(Keys.toChecksumAddress(loadedWallet.checksumAddress()));
+            ((Button)view.findViewById(R.id.wallet_details_copyaddress)).setOnClickListener(view1 -> {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.wallet_address), Keys.toChecksumAddress(loadedWallet.checksumAddress()));
+                clipboard.setPrimaryClip(clip);
+                Snackbar.make(view1, R.string.copied_address, Snackbar.LENGTH_SHORT).show();
             });
-            EtherBlockies eb = new EtherBlockies(lw.getCredentials().getAddress().toCharArray(),
-                    8, 4);
-            Bitmap scaledBlockie = Bitmap.createScaledBitmap(eb.getBitmap(),
-                    ConvertHelper.dpToPixels(80, getResources()), ConvertHelper
-                            .dpToPixels(80, getResources()),
-                    false);
+
+            EtherBlockies eb = loadedWallet.etherBlockies(8, 4);
+            Bitmap scaledBlockie = Bitmap.createScaledBitmap(
+                    eb.getBitmap(),
+                    ConvertHelper.dpToPixels(80, getResources()), ConvertHelper.dpToPixels(80, getResources()),
+                    false
+            );
             ((CircleImageView)view.findViewById(R.id.wallet_details_blockie)).setImageBitmap(scaledBlockie);
+
             //get the balance
+
+            GeneralAsyncTask<String, String> asyncTask = new GeneralAsyncTask<>();
+            asyncTask.setBackgroundCompletion((params) -> {
+                if (params.length < 1) {
+                    return null;
+                }
+                String address = params[0];
+
+                BigInteger balance = BigInteger.ZERO;
+                SSLHelper.initializeSSLContext(getContext());
+                try {
+                    balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
+            });
+
+            // TODO: @simon_artner pls change to GeneralAsyncTask and use params and result generics...
             new AsyncTask<Object, Object, Object>() {
                 String balanceStr = null;
                 @Override
@@ -101,8 +122,7 @@ public class WalletDetailsFragment extends Fragment {
                     BigInteger balance = BigInteger.ZERO;
                     SSLHelper.initializeSSLContext(getContext());
                     try {
-                        balance = VariableHolder.getWeb3j().ethGetBalance(lw.getCredentials()
-                                        .getAddress(),
+                        balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(loadedWallet.getCredentials().getAddress(),
                                 DefaultBlockParameterName.LATEST).send().getBalance();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -113,14 +133,14 @@ public class WalletDetailsFragment extends Fragment {
                 }
                 @Override
                 protected void onPostExecute(Object o) {
-                    balv.setText(balv.getText().toString().replace("$BALANCE$",
-                            balanceStr));
+                    String balanceTemplate = getString(R.string.balance_eth_template);
+                    balv.setText(balanceTemplate.replace("$BALANCE$", balanceStr));
                 }
             }.execute(null, null, null);
 
             final RecyclerView thr = view.findViewById(R.id.wallet_details_transactions);
 
-            EtherscanAPI esa = new EtherscanAPI(lw.getCredentials().getAddress(), 20);
+            EtherscanAPI esa = new EtherscanAPI(loadedWallet.getCredentials().getAddress(), 20);
             esa.async_getNextPage(new iResult<ArrayList<EtherscanTransaction>>() {
                 @Override
                 public void onResult(final ArrayList<EtherscanTransaction> result) {
@@ -156,10 +176,7 @@ public class WalletDetailsFragment extends Fragment {
 
                 }
             });
-
-        } else {
-            //TODO: load wallet here
-        }
+        });
     }
 
     @Override

@@ -4,38 +4,71 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.boilertalk.ballet.R;
-import com.boilertalk.ballet.walletsList.WalletsListFragment;
-import com.boilertalk.ballet.addWallet.AddWalletFragment;
-import com.boilertalk.ballet.walletDetails.WalletDetailsFragment;
+import com.boilertalk.ballet.walletslist.WalletsListFragment;
+import com.boilertalk.ballet.addwallet.AddWalletFragment;
+import com.boilertalk.ballet.walletdetails.WalletDetailsFragment;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import java.util.HashMap;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class NavigationActivity extends AppCompatActivity implements AddWalletFragment
         .OnFragmentInteractionListener, WalletDetailsFragment.OnFragmentInteractionListener {
 
-    private FrameLayout fragmentView;
+    // The FrameLayout holding the fragments
+    @BindView(R.id.navigation_content_view) FrameLayout fragmentView;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    // The navigation bar
+    @BindView(R.id.navigation) BottomNavigationViewEx bottomNavigationView;
+
+    // Cache fragments
+    private SparseArray<Fragment> cachedFragments = new SparseArray<Fragment>();
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_wallet:
-                    getSupportFragmentManager().beginTransaction().add(R.id
-                            .navigation_content_view, new WalletsListFragment()).commit();
-                    return true;
-                case R.id.navigation_send:
-                    return true;
-                case R.id.navigation_receive:
-                    return true;
-                case R.id.navigation_settings:
-                    return true;
+            Fragment fragment = null;
+
+            fragment = cachedFragments.get(item.getItemId());
+
+            if (fragment == null) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_wallet:
+                        fragment = new WalletsListFragment();
+                        break;
+                    case R.id.navigation_send:
+                        break;
+                    case R.id.navigation_receive:
+                        break;
+                    case R.id.navigation_settings:
+                        break;
+                }
             }
+
+            cachedFragments.put(item.getItemId(), fragment);
+
+            if (fragment != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.navigation_content_view, fragment)
+                        .commit();
+                return true;
+            }
+
             return false;
         }
     };
@@ -44,14 +77,15 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        ButterKnife.bind(this);
 
-        fragmentView = findViewById(R.id.navigation_content_view);
+        // Custom options
+        bottomNavigationView.enableItemShiftingMode(false);
+        bottomNavigationView.enableShiftingMode(false);
+        bottomNavigationView.enableAnimation(false);
 
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.navigation_wallet);
-
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_wallet);
     }
 
     @Override

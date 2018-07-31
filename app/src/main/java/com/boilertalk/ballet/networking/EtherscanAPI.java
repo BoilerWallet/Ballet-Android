@@ -1,7 +1,6 @@
-package com.boilertalk.ballet.Etherscan;
+package com.boilertalk.ballet.networking;
 
 import android.os.AsyncTask;
-import android.util.JsonReader;
 import android.util.Log;
 
 import com.boilertalk.ballet.toolbox.iResult;
