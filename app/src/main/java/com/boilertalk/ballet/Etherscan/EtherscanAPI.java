@@ -58,7 +58,8 @@ public class EtherscanAPI {
             for(int i = 0; i < jsar.length(); i++) {
                 JSONObject tx = jsar.getJSONObject(i);
                 EtherscanTransaction es = new EtherscanTransaction(tx.getLong("blockNumber"),
-                        tx.getString("from"), tx.getString("to"), tx.getLong("value"));
+                        tx.getString("from"), tx.getString("to"), tx.getLong("value"), tx
+                        .getLong("timeStamp"));
                 page.add(es);
             }
         } catch (JSONException e) {

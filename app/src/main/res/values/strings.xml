@@ -38,5 +38,6 @@
     <string name="saving_wallet">Saving Wallet</string>
     <string name="wallet_address">Wallet Address</string>
     <string name="copied_address">Copied the address to the clipboard!</string>
+    <string name="self">self</string>
     <!-- Section End -->
 </resources>

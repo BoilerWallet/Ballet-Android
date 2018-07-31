@@ -1,5 +1,6 @@
 package com.boilertalk.ballet.walletsList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -118,8 +119,10 @@ public class WalletsListFragment extends Fragment {
                 return holder;
             }
 
+            @SuppressLint("StaticFieldLeak")
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                //TODO delete outdated information
                 final ProgressBar pb = holder.itemView.findViewById(R.id.image_progress_spinner);
                 final String walletName = wallets.get(position).getWalletName();
                 ((TextView) holder.itemView.findViewById(R.id.wallet_name)).setText(walletName);

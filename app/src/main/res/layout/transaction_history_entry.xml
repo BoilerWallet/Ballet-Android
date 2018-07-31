@@ -29,7 +29,7 @@
             android:singleLine="true"
             android:fadingEdge="horizontal"
             android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"/>
+            android:scrollHorizontally="true" />
 
     </LinearLayout>
 
@@ -38,19 +38,19 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:paddingHorizontal="4dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:text="@string/balance_eth"
         android:singleLine="true"
         android:ellipsize="marquee"
         android:scrollHorizontally="true"/>
 
-    <TextView
+    <com.github.curioustechizen.ago.RelativeTimeTextView
         android:id="@+id/transaction_time"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:paddingHorizontal="4dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:text="then"
         android:singleLine="true"

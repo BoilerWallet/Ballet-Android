@@ -131,21 +131,24 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="@string/from_to"
-                android:textColor="@color/dark_text_primary"/>
+                android:textColor="@color/dark_text_primary"
+                android:gravity="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="@string/value"
-                android:textColor="@color/dark_text_primary"/>
+                android:textColor="@color/dark_text_primary"
+                android:gravity="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="@string/when"
-                android:textColor="@color/dark_text_primary"/>
+                android:textColor="@color/dark_text_primary"
+                android:gravity="center"/>
 
         </LinearLayout>
 

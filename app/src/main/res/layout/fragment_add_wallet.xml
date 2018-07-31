@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".addWallet.AddWalletFragment">
 
     <LinearLayout
@@ -14,64 +14,70 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/select_your_favorite_new_account"
-            android:textSize="24sp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/select_your_favorite_new_account"
+            android:textSize="24sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp">
+            android:layout_marginRight="12dp"
+            android:orientation="horizontal">
 
-            <include layout="@layout/create_wallet_blockie"
+            <include
                 android:id="@+id/create_wallet_blockie_1"
+                layout="@layout/create_wallet_blockie"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
-            <include layout="@layout/create_wallet_blockie"
+            <include
                 android:id="@+id/create_wallet_blockie_2"
+                layout="@layout/create_wallet_blockie"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
-            <include layout="@layout/create_wallet_blockie"
+            <include
                 android:id="@+id/create_wallet_blockie_3"
+                layout="@layout/create_wallet_blockie"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp">
+            android:layout_marginRight="12dp"
+            android:orientation="horizontal">
 
-            <include layout="@layout/create_wallet_blockie"
+            <include
                 android:id="@+id/create_wallet_blockie_4"
+                layout="@layout/create_wallet_blockie"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
-            <include layout="@layout/create_wallet_blockie"
+            <include
                 android:id="@+id/create_wallet_blockie_5"
+                layout="@layout/create_wallet_blockie"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
-            <include layout="@layout/create_wallet_blockie"
+            <include
                 android:id="@+id/create_wallet_blockie_6"
+                layout="@layout/create_wallet_blockie"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
         </LinearLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -82,12 +88,12 @@
 
             <Button
                 android:id="@+id/button_reload"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintRight_toRightOf="parent"
-                android:textColor="@color/colorAccent"
                 android:text="@string/reload"
-                style="@style/Widget.AppCompat.Button.Borderless"/>
+                android:textColor="@color/colorAccent"
+                app:layout_constraintRight_toRightOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -100,30 +106,30 @@
                 android:id="@+id/add_wallet_input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Name of your new account:"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginRight="16dp"
+                android:ems="10"
+                android:hint="Name of your new account:"
+                android:inputType="textPersonName" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp">
 
             <Button
                 android:id="@+id/button_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"
-                app:layout_constraintRight_toRightOf="parent"
                 android:text="@string/create"
                 android:textColor="@color/light_text_primary"
-                android:theme="@style/DefaultRaisedButton"/>
+                android:theme="@style/DefaultRaisedButton"
+                app:layout_constraintRight_toRightOf="parent" />
 
 
         </android.support.constraint.ConstraintLayout>

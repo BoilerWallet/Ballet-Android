@@ -4,17 +4,20 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.boilertalk.ballet.Etherscan.EtherscanAPI;
@@ -25,6 +28,7 @@ import com.boilertalk.ballet.toolbox.EtherBlockies;
 import com.boilertalk.ballet.toolbox.SSLHelper;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.toolbox.iResult;
+import com.github.curioustechizen.ago.RelativeTimeTextView;
 
 import org.web3j.crypto.Keys;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -139,13 +143,58 @@ public class WalletDetailsFragment extends Fragment {
 
                         @Override
                         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                            ((TextView)holder.itemView.findViewById(R.id
-                                    .transaction_sender_receiver))
-                                    .setText(getString(R.string.sender_receiver)
-                                            .replace("$SENDER$", result.get(position).srcAddr)
-                                            .replace("$RECEIVER$", result.get(position).dstAddr));
-                            ((TextView)holder.itemView.findViewById(R.id
-                                    .transaction_sender_receiver)).setSelected(true);
+                            boolean fromself = false, toself = false;
+                            TextView fromTo = ((TextView)holder.itemView
+                                    .findViewById(R.id.transaction_sender_receiver));
+                            TextView balance = ((TextView)holder.itemView
+                                    .findViewById(R.id.transaction_balance));
+                            ImageView icon = ((ImageView)holder.itemView
+                                    .findViewById(R.id.transaction_type_img));
+                            RelativeTimeTextView txtimeView = ((RelativeTimeTextView)holder.itemView
+                                    .findViewById(R.id.transaction_time));
+                            EtherscanTransaction etx = result.get(position);
+
+                            if(etx.dstAddr.equalsIgnoreCase(lw.getCredentials().getAddress())) {
+                                toself = true;
+                            }
+                            if(etx.srcAddr.equalsIgnoreCase(lw.getCredentials().getAddress())) {
+                                fromself = true;
+                            }
+                            fromTo.setText(getString(R.string.sender_receiver)
+                                            .replace("$SENDER$",
+                                                    toself ? getString(R.string.self) :
+                                                            etx.srcAddr)
+                                            .replace("$RECEIVER$",
+                                                    fromself ? getString(R.string.self) :
+                                                            etx.dstAddr));
+                            fromTo.setSelected(true);
+
+                            if(fromself == true && toself == false) {
+                                icon.setImageResource(R.drawable.ic_arrow_upward);
+                                icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
+                                                .red500),
+                                        PorterDuff.Mode.SRC_ATOP);
+                            } else if(fromself == false && toself == true) {
+                                icon.setImageResource(R.drawable.ic_arrow_downward);
+                                icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
+                                                .green500),
+                                        PorterDuff.Mode.SRC_ATOP);
+                            } else if(fromself == true && toself == true) {
+                                icon.setImageResource(R.drawable.ic_selftoself_transaction);
+                                icon.setColorFilter(ContextCompat.getColor(getContext(), R.color
+                                                .colorPrimary),
+                                        PorterDuff.Mode.SRC_ATOP);
+                            }
+
+                            String balanceStr = Convert.fromWei(Long.toString(result.get(position).value),
+                                    Convert.Unit.ETHER).toString();
+
+                            //TODO round too long values
+                            balance.setText(getString(R.string.balance_eth)
+                                            .replace("$BALANCE$", balanceStr));
+
+                            txtimeView.setReferenceTime(etx.timestamp);
+                            Log.d("TIMES", "TAMP " + Long.toString(etx.timestamp));
                         }
 
                         @Override
