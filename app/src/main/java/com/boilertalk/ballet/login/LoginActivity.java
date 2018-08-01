@@ -16,9 +16,11 @@ import android.widget.EditText;
 import com.boilertalk.ballet.navigation.NavigationActivity;
 import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.toolbox.ConstantHolder;
+import com.boilertalk.ballet.toolbox.GeneralAsyncTask;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 
 import org.spongycastle.crypto.generators.OpenBSDBCrypt;
+import org.web3j.abi.datatypes.Bool;
 
 import java.security.SecureRandom;
 
@@ -63,25 +65,30 @@ public class LoginActivity extends AppCompatActivity {
 
                         final ProgressDialog pd = ProgressDialog.show(view.getContext(), getString(R
                                         .string.loading_), getString(R.string.hashing_pw_in_progress));
-                        AsyncTask.execute(new Runnable() {
-                            @Override
-                            public void run() {
 
-                                SecureRandom sera = new SecureRandom();
-                                sera.nextBytes(salt);
-                                String bcryptString = OpenBSDBCrypt.generate(passwordText.getText()
-                                                .toString().toCharArray(), salt,12);
-                                Log.d("lllll", "pass " + passwordText.getText().toString());
+                        GeneralAsyncTask<String, String> newpwt = new GeneralAsyncTask<>();
+                        newpwt.setBackgroundCompletion((pass) -> {
+                            SecureRandom sera = new SecureRandom();
+                            sera.nextBytes(salt);
+                            String bcryptString = OpenBSDBCrypt.generate(pass[0].toCharArray(),
+                                    salt,12);
 
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString(ConstantHolder.SHPREF_PASSHASH_KEY, bcryptString);
-                                editor.apply();
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString(ConstantHolder.SHPREF_PASSHASH_KEY, bcryptString);
+                            editor.apply();
 
-                                pd.dismiss();
-                            }
+                            return bcryptString;
                         });
+                        newpwt.setPostExecuteCompletion((bcryptString) -> {
+                            //Log.d("lllll", "pass " + passwordText.getText().toString());
+                            passwordText.setText("");
+                            passwordConfirmText.setText("");
+
+                            pd.dismiss();
+                        });
+                        newpwt.execute(passwordText.getText().toString());
+                        
                     } else {
-                        //TODO: notify the user of his unmatching passwords
                         passwordConfirmText.requestFocus();
                         Snackbar wpSnackbar = Snackbar.make(view,
                                 R.string.pws_not_matching_snackbar, Snackbar.LENGTH_SHORT);
@@ -92,27 +99,29 @@ public class LoginActivity extends AppCompatActivity {
                             Snackbar.LENGTH_SHORT);
                     final ProgressDialog pd = ProgressDialog.show(view.getContext(), getString(R
                                     .string.loading_), getString(R.string.checking_password));
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(OpenBSDBCrypt.checkPassword(sharedPref.getString(ConstantHolder
-                                            .SHPREF_PASSHASH_KEY, null),
-                                    passwordText.getText().toString().toCharArray())) {
-                                //correct
-                                VariableHolder.getInstance().setPassword(passwordText.getText().toString());
-                                pd.dismiss();
-                                Intent navPageIntent = new Intent(getApplicationContext(), NavigationActivity.class);
-                                startActivity(navPageIntent);
-                            } else {
-                                //incorrect
-                                //TODO notify user of his wrong password
-                                passwordText.requestFocus();
+                    GeneralAsyncTask<String, Boolean> checkpwt = new GeneralAsyncTask<String, Boolean>();
+                    checkpwt.setBackgroundCompletion((pass) -> new Boolean(OpenBSDBCrypt.checkPassword(
+                            sharedPref.getString(ConstantHolder.SHPREF_PASSHASH_KEY, null),
+                            pass[0].toCharArray())));
+                    checkpwt.setPostExecuteCompletion((isCorrect) -> {
+                        if(isCorrect.booleanValue()) {
+                            //correct
+                            VariableHolder.getInstance().setPassword(passwordText.getText().toString());
+                            //"delete" password in activity
+                            passwordText.setText("");
+                            pd.dismiss();
+                            Intent navPageIntent = new Intent(getApplicationContext(), NavigationActivity.class);
+                            startActivity(navPageIntent);
+                            finish();
+                        } else {
+                            //incorrect
+                            passwordText.requestFocus();
 
-                                pd.dismiss();
-                                wpSnackbar.show();
-                            }
+                            pd.dismiss();
+                            wpSnackbar.show();
                         }
                     });
+                    checkpwt.execute(passwordText.getText().toString());
                 }
             }
         });

@@ -118,30 +118,6 @@ public class WalletDetailsFragment extends Fragment {
         });
         asyncTask.execute(wallet.getAddress());
 
-        // TODO: @simon_artner pls change to GeneralAsyncTask and use params and result generics...
-            /*new AsyncTask<Object, Object, Object>() {
-                String balanceStr = null;
-                @Override
-                protected Object doInBackground(Object[] objects) {
-                    BigInteger balance = BigInteger.ZERO;
-                    SSLHelper.initializeSSLContext(getContext());
-                    try {
-                        balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(loadedWallet.getCredentials().getAddress(),
-                                DefaultBlockParameterName.LATEST).send().getBalance();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    balanceStr = Convert.fromWei(balance.toString(),
-                            Convert.Unit.ETHER).toString();
-                    return null;
-                }
-                @Override
-                protected void onPostExecute(Object o) {
-                    String balanceTemplate = getString(R.string.balance_eth_template);
-                    balv.setText(balanceTemplate.replace("$BALANCE$", balanceStr));
-                }
-            }.execute(null, null, null);*/
-
         final RecyclerView thr = view.findViewById(R.id.wallet_details_transactions);
 
         EtherscanAPI esa = new EtherscanAPI(wallet.getAddress(), 20);
