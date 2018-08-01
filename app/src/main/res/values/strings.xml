@@ -40,5 +40,13 @@
     <string name="wallet_address">Wallet Address</string>
     <string name="copied_address">Copied the address to the clipboard!</string>
     <string name="self">self</string>
+    <string name="send">send</string>
+    <string name="send_from">FROM</string>
+    <string name="send_select_account">select account</string>
+    <string name="send_receiver_address">Receiver Address</string>
+    <string name="send_ammount">Ammount</string>
+    <string name="send_gas_limit">Gas Limit</string>
+    <string name="send_dimens_ETH">ETH</string>
+    <string name="send_fee">Fee</string>
     <!-- Section End -->
 </resources>

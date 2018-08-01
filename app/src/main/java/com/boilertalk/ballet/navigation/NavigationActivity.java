@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.boilertalk.ballet.R;
+import com.boilertalk.ballet.send.SendFragment;
 import com.boilertalk.ballet.walletslist.WalletsListFragment;
 import com.boilertalk.ballet.addwallet.AddWalletFragment;
 import com.boilertalk.ballet.walletdetails.WalletDetailsFragment;
@@ -51,6 +52,7 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
                         fragment = new WalletsListFragment();
                         break;
                     case R.id.navigation_send:
+                        fragment = new SendFragment();
                         break;
                     case R.id.navigation_receive:
                         break;
