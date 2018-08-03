@@ -54,5 +54,6 @@
     <string name="send_fast_speed">Fast</string>
     <string name="send_fastest_speed">Fastest</string>
     <string name="select_your_account">Select Your Account</string>
+    <string name="receive_account">ACCOUNT</string>
     <!-- Section End -->
 </resources>
