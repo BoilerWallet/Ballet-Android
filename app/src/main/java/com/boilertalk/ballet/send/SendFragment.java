@@ -1,5 +1,7 @@
 package com.boilertalk.ballet.send;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,19 +15,17 @@ import android.widget.TextView;
 
 import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.database.Wallet;
-import com.boilertalk.ballet.networking.EthGasInfo;
 import com.boilertalk.ballet.networking.EthGasStationAPI;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
+import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.walletslist.SelectWalletDialogFragment;
 
-import org.web3j.utils.Convert;
-
-import java.math.BigDecimal;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.realm.Realm;
 
-public class SendFragment extends Fragment implements SelectWalletDialogFragment.WalletSelectedListener {
+public class SendFragment extends Fragment {
+    private static final int RC_SELECT_WALLET = 1;
     private CircleImageView senderBlockieView;
     private TextView        senderNameView;
     private TextView        senderAddrView;
@@ -36,6 +36,7 @@ public class SendFragment extends Fragment implements SelectWalletDialogFragment
     private TextView        feeInfoView;
     private SeekBar         feeInput;
     private Wallet          selectedWallet;
+    private Context         context;
 
 
     @Override
@@ -69,7 +70,7 @@ public class SendFragment extends Fragment implements SelectWalletDialogFragment
             feeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    feeInfoView.setText(gasInfo.getFormattedInfoString(getContext(), (i/1000000.0)+gasInfo.safeLowPrice));
+                    feeInfoView.setText(gasInfo.getFormattedInfoString(context, (i/1000000.0)+gasInfo.safeLowPrice));
                 }
 
                 @Override
@@ -83,28 +84,45 @@ public class SendFragment extends Fragment implements SelectWalletDialogFragment
                 }
             });
             feeInput.setProgress((int) Math.ceil((gasInfo.averagePrice - gasInfo.safeLowPrice) * 1000000));
-            feeInfoView.setText(gasInfo.getFormattedInfoString(getContext(), gasInfo.averagePrice));
+            feeInfoView.setText(gasInfo.getFormattedInfoString(context, gasInfo.averagePrice));
         });
 
         selectAccountButton.setOnClickListener((view1) -> {
             SelectWalletDialogFragment swdf = new SelectWalletDialogFragment();
-            swdf.setTargetFragment(this, 1);
+            swdf.setTargetFragment(this, RC_SELECT_WALLET);
             swdf.show(getActivity().getSupportFragmentManager(), "SelectWalletDialog");
         });
     }
 
+
     @Override
-    public void onWalletSelected(Wallet wallet) {
-        selectedWallet = wallet;
-        // Create blockies
-        EtherBlockies blockies = wallet.etherBlockies(8, 4);
-        Bitmap blockiebmp = Bitmap.createScaledBitmap(
-                blockies.getBitmap(),
-                ConvertHelper.dpToPixels(56, getResources()), ConvertHelper.dpToPixels(56, getResources()),
-                false
-        );
-        senderBlockieView.setImageBitmap(blockiebmp);
-        senderNameView.setText(wallet.getWalletName());
-        senderAddrView.setText(wallet.getAddress());
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case RC_SELECT_WALLET:
+                if(resultCode == 1) {
+                    String s_uuid = data.getExtras().getString("wallet_uuid");
+                    Realm realm = Realm.getDefaultInstance();
+                    selectedWallet = realm.where(Wallet.class).equalTo("s_uuid", s_uuid).findFirst();;
+                    // Create blockies
+                    EtherBlockies blockies = selectedWallet.etherBlockies(8, 4);
+                    Bitmap blockiebmp = Bitmap.createScaledBitmap(
+                            blockies.getBitmap(),
+                            ConvertHelper.dpToPixels(56, getResources()), ConvertHelper.dpToPixels(56, getResources()),
+                            false
+                    );
+                    senderBlockieView.setImageBitmap(blockiebmp);
+                    senderNameView.setText(selectedWallet.getWalletName());
+                    senderAddrView.setText(selectedWallet.getAddress());
+                }
+                break;
+            default:
+                return;
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }

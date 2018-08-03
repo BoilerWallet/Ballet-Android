@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 
 public class NavigationActivity extends AppCompatActivity implements AddWalletFragment
         .OnFragmentInteractionListener, WalletDetailsFragment.OnFragmentInteractionListener {
+    private static final String NAVIGATION_SELECTED_ITEM_ID_TAG = "navigation_item_selected";
 
     // The FrameLayout holding the fragments
     @BindView(R.id.navigation_content_view) FrameLayout fragmentView;
@@ -36,18 +37,26 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
     // The navigation bar
     @BindView(R.id.navigation) BottomNavigationViewEx bottomNavigationView;
 
-    // Cache fragments
-    private SparseArray<Fragment> cachedFragments = new SparseArray<Fragment>();
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment = null;
+            boolean success = false;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment currFrag = fragmentManager.getPrimaryNavigationFragment();
+            if(currFrag != null) {
+                if(currFrag.getTag().equals("details")) {
+                    fragmentManager.popBackStackImmediate();
+                    fragmentTransaction.detach(fragmentManager
+                            .findFragmentByTag("navitem_nr_" + R.id.navigation_wallet));
+                }
+                fragmentTransaction.detach(currFrag);
+            }
 
-            fragment = cachedFragments.get(item.getItemId());
-
-            if (fragment == null) {
+            String tag = "navitem_nr_" + Integer.toString(item.getItemId());
+            Fragment fragment = fragmentManager.findFragmentByTag(tag);
+            if(fragment == null) {
                 switch (item.getItemId()) {
                     case R.id.navigation_wallet:
                         fragment = new WalletsListFragment();
@@ -61,19 +70,24 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
                     case R.id.navigation_settings:
                         break;
                 }
+                if(fragment != null) {
+                    fragmentTransaction.add(fragmentView.getId(), fragment, tag);
+
+                    success = true;
+                }
+            } else {
+                fragmentTransaction.attach(fragment);
+
+                success = true;
             }
 
-            cachedFragments.put(item.getItemId(), fragment);
-
-            if (fragment != null) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.navigation_content_view, fragment)
-                        .commit();
-                return true;
+            if(success) {
+                fragmentTransaction.setPrimaryNavigationFragment(fragment);
+                fragmentTransaction.setReorderingAllowed(true);
+                fragmentTransaction.commitNowAllowingStateLoss();
             }
 
-            return false;
+            return success;
         }
     };
 
@@ -89,7 +103,17 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
         bottomNavigationView.enableAnimation(false);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_wallet);
+        if((savedInstanceState != null) && savedInstanceState.containsKey(NAVIGATION_SELECTED_ITEM_ID_TAG)) {
+            bottomNavigationView.setSelectedItemId(savedInstanceState.getInt(NAVIGATION_SELECTED_ITEM_ID_TAG));
+        } else {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_wallet);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("navigation_item_selected", bottomNavigationView.getSelectedItemId());
     }
 
     @Override
