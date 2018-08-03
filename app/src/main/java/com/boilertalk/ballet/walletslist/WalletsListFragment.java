@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -190,9 +191,13 @@ public class WalletsListFragment extends Fragment {
         holder.itemView.setOnClickListener((view) -> {
             WalletDetailsFragment walletDetailsFragment = new WalletDetailsFragment();
             walletDetailsFragment.setWallet(wallet);
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.navigation_content_view, walletDetailsFragment)
-                    .addToBackStack(null).commit();
+
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.detach(this);
+            fragmentTransaction.setPrimaryNavigationFragment(walletDetailsFragment);
+            fragmentTransaction.add(R.id.navigation_content_view, walletDetailsFragment, "details");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
         //set the balance text views
