@@ -20,6 +20,6 @@
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:context=".walletslist.WalletsListFragment"
-        tools:listitem="@layout/fragment_wallets_select_entry" />
+        tools:listitem="@layout/fragment_wallet_select_entry" />
 
 </LinearLayout>
