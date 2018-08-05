@@ -33,6 +33,7 @@ import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import io.realm.Realm;
 
@@ -175,7 +176,7 @@ public class AddWalletFragment extends DialogFragment {
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.beginTransaction();
                                 //things in realm
-                                Wallet wallet = realm.createObject(Wallet.class);
+                                Wallet wallet = realm.createObject(Wallet.class, UUID.randomUUID().toString());
                                 wallet.setWalletFileName(interesting);
                                 wallet.setWalletName(walletNameInput.getText().toString());
                                 wallet.setAddress(genCredentials[(int)selectedContainer.getTag()]
