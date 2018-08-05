@@ -23,7 +23,7 @@ public class CustomApplication extends MultiDexApplication {
         //Application startup code
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
-                .schemaVersion(4) // Must be bumped when the schema changes
+                .schemaVersion(5) // Must be bumped when the schema changes
                 .migration(new GeneralDatabaseMigrations()) // Migration to run instead of throwing an exception
                 .build();
         Realm.setDefaultConfiguration(config);
@@ -62,6 +62,14 @@ public class CustomApplication extends MultiDexApplication {
                         .addPrimaryKey("s_uuid");
                 realm.getSchema().get(RPCUrl.class.getSimpleName())
                         .addPrimaryKey("s_uuid");
+                oldVersion++; //so that all updates are applied
+            }
+            if (oldVersion == 4) {
+                // Required primary keys
+                realm.getSchema().get(Wallet.class.getSimpleName())
+                        .setRequired("s_uuid", true);
+                realm.getSchema().get(RPCUrl.class.getSimpleName())
+                        .setRequired("s_uuid", true);
                 oldVersion++; //so that all updates are applied
             }
         }

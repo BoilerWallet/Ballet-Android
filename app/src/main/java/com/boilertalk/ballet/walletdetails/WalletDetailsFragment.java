@@ -106,7 +106,7 @@ public class WalletDetailsFragment extends Fragment {
             BigInteger balance = BigInteger.ZERO;
             SSLHelper.initializeSSLContext(getContext());
             try {
-                balance = VariableHolder.getInstance().getWeb3j().ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
+                balance = VariableHolder.getInstance().activeWeb3j().ethGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance();
             } catch (IOException e) {
                 e.printStackTrace();
             }

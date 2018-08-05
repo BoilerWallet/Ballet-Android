@@ -125,7 +125,7 @@ public class VariableHolder {
      * @return The default mainnet RPCUrl.
      */
     private RPCUrl defaultMainnetRPCUrl(Realm realm) {
-        RPCUrl mainnet = realm.createObject(RPCUrl.class);
+        RPCUrl mainnet = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         mainnet.setName("Infura Mainnet");
         mainnet.setUrl("https://mainnet.infura.io/m6d0dZdIbdR5d6bvHDQj");
         mainnet.setChainId(1);
@@ -145,19 +145,19 @@ public class VariableHolder {
     private List<RPCUrl> defaultRPCUrls(Realm realm) {
         RPCUrl mainnet = defaultMainnetRPCUrl(realm);
 
-        RPCUrl ropsten = realm.createObject(RPCUrl.class);
+        RPCUrl ropsten = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         ropsten.setName("Infura Ropsten");
         ropsten.setUrl("https://ropsten.infura.io/m6d0dZdIbdR5d6bvHDQj");
         ropsten.setChainId(3);
         ropsten.setActive(false);
 
-        RPCUrl rinkeby = realm.createObject(RPCUrl.class);
+        RPCUrl rinkeby = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         rinkeby.setName("Infura Rinkeby");
         rinkeby.setUrl("https://rinkeby.infura.io/m6d0dZdIbdR5d6bvHDQj");
         rinkeby.setChainId(4);
         rinkeby.setActive(false);
 
-        RPCUrl kovan = realm.createObject(RPCUrl.class);
+        RPCUrl kovan = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         kovan.setName("Infura Kovan");
         kovan.setUrl("https://kovan.infura.io/m6d0dZdIbdR5d6bvHDQj");
         kovan.setChainId(42);
@@ -196,7 +196,7 @@ public class VariableHolder {
             realm.commitTransaction();
         }
 
-        return realm.where(RPCUrl.class).equalTo("active", true).findFirst();
+        return realm.where(RPCUrl.class).equalTo("isActive", true).findFirst();
     }
 
     /**
@@ -205,7 +205,7 @@ public class VariableHolder {
      *
      * @return The instance of Web3j to be used in this app.
      */
-    public Web3j activeWeb3() {
+    public Web3j activeWeb3j() {
         return Web3jFactory.build(new HttpService(activeUrl().getUrl()));
     }
 }

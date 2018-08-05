@@ -8,19 +8,16 @@ import java.util.UUID;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 public class RPCUrl extends RealmObject {
 
-    @PrimaryKey @Index private String s_uuid;
+    @PrimaryKey @Index @Required private String s_uuid;
 
     private String name;
     private String url;
     private int chainId;
     private boolean isActive = false;
-
-    public RPCUrl() {
-        s_uuid = UUID.randomUUID().toString();
-    }
 
     // Getter and Setter
 
