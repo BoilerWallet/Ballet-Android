@@ -1,0 +1,23 @@
+language: android
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-27.0.3
+
+    # The SDK version used to compile your project
+    - android-26
+
+    # For the emulator
+    - sys-img-armeabi-v7a-android-26
+before_install:
+  - bundle install
+script:
+  # Output something every 10 minutes or Travis kills the job
+  - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
+  - bundle exec fastlane beta
+  # Killing background sleep loop
+  - kill %1
