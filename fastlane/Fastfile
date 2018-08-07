@@ -23,6 +23,7 @@ platform :android do
 
   desc 'Submit a new Beta Build to Crashlytics Beta and Play Beta'
   lane :beta do
+    # Build app
     gradle(
       task: 'clean assemble',
       build_type: 'Release',
@@ -33,6 +34,9 @@ platform :android do
         "android.injected.signing.key.password" => ENV['KEYSTORE_KEY_PASSWORD']
       }
     )
+
+    # Generate changelogs
+    changelog_from_git_commits
 
     # Upload to crashlytics
     crashlytics(
