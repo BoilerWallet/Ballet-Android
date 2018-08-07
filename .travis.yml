@@ -15,6 +15,16 @@ android:
     - sys-img-armeabi-v7a-android-26
 before_install:
   - bundle install
+before_script:
+  # Get secret files from environment variables
+
+  # gcloud service account for fastlane
+  - echo $GCLOUD_SERVICE_ACCOUNT_KEY > service_account_key.json
+
+  # keystore for signing
+  - echo $KEYSTORE_BASE64 | base64 --decode > tmp-keystore.jks
+  # keystore copy for gradle
+  - cp tmp-keystore.jks app/
 script:
   # Output something every 10 minutes or Travis kills the job
   - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &

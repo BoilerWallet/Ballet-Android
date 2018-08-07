@@ -27,6 +27,7 @@ platform :android do
     gradle(
       task: 'clean assemble',
       build_type: 'Release',
+      print_command: false,
       properties: {
         "android.injected.signing.store.file" => 'tmp-keystore.jks',
         "android.injected.signing.store.password" => ENV['KEYSTORE_PASSWORD'],
