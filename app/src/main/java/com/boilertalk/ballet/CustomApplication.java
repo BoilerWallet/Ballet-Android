@@ -8,6 +8,8 @@ import com.boilertalk.ballet.database.Wallet;
 import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
 import io.realm.Realm;
@@ -20,6 +22,10 @@ public class CustomApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Fabric setup
+        Fabric.with(this, new Crashlytics());
+
         //Application startup code
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
