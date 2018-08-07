@@ -17,12 +17,13 @@ import java.util.ArrayList;
 public class EtherscanAPI {
     private static final String etherscan_base_address = "https://api-ropsten.etherscan.io";
     private static final String etherscan_tx_pq =
-            "/api?module=account&action=txlist&address=$ADDRESS$&sort=asc&page=$PAGE$&offset" +
+            "/api?module=account&action=txlist&address=$ADDRESS$&sort=asc&startblock=$STARTBLOCK$&page=$PAGE$&offset" +
                     "=$PAGE_SIZE$";
 
     private String walletAddress;
     private int pageSize;
     private int currPage = 0;
+    private long firstBlockNr = 0;
 
     public EtherscanAPI(String walletAddress, int pageSize) {
         this.walletAddress = walletAddress;
@@ -37,7 +38,8 @@ public class EtherscanAPI {
             InputStream is = new java.net.URL(etherscan_base_address + etherscan_tx_pq
                     .replace("$ADDRESS$", walletAddress)
                     .replace("$PAGE$", Integer.toString(currPage))
-                    .replace("$PAGE_SIZE$", Integer.toString(pageSize))).openStream();
+                    .replace("$PAGE_SIZE$", Integer.toString(pageSize))
+                    .replace("$STARTBLOCK$", Long.toString(firstBlockNr))).openStream();
             java.util.Scanner s = new java.util.Scanner(is, "UTF-8").useDelimiter("\\A");
             res = s.hasNext() ? s.next() : "";
         } catch (MalformedURLException e) {
@@ -48,7 +50,9 @@ public class EtherscanAPI {
         Log.d("EtherscanAPI", "request: " + etherscan_base_address + etherscan_tx_pq
                 .replace("$ADDRESS$", walletAddress)
                 .replace("$PAGE$", Integer.toString(currPage))
-                .replace("$PAGE_SIZE$", Integer.toString(pageSize)));
+                .replace("$PAGE_SIZE$", Integer.toString(pageSize))
+                .replace("$STARTBLOCK$", Long.toString(firstBlockNr))
+        );
         Log.d("EtherscanAPI", "result of request: " + res);
 
         try {
@@ -64,7 +68,13 @@ public class EtherscanAPI {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        if(currPage == 0) {
+            if(page.size() > 0) {
+                firstBlockNr = page.get(0).blockNumber;
+            }
+        }
 
+        currPage++;
         return page;
     }
 

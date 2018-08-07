@@ -69,6 +69,9 @@ dependencies {
     // Rounded image views
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // QR Code library
+    implementation 'com.github.kenglxn.QRGen:android:2.5.0'
+
     // Web3
     implementation 'org.web3j:core:3.3.1-android'
 

@@ -144,14 +144,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -159,6 +160,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:text="@string/from_to"
+                        android:gravity="center"
                         android:textColor="@color/dark_text_primary" />
 
                     <TextView
@@ -166,6 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/value"
+                        android:gravity="center"
                         android:textColor="@color/dark_text_primary" />
 
                     <TextView
@@ -173,19 +176,29 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/when"
+                        android:gravity="center"
                         android:textColor="@color/dark_text_primary" />
 
                 </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/wallet_details_transactions"
+                <android.support.v4.widget.SwipeRefreshLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                    tools:context=".walletdetails.WalletDetailsFragment"
-                    tools:listitem="@layout/transaction_history_entry" />
+                    android:id="@+id/wallet_details_tx_refresher">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/wallet_details_transactions"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                        tools:context=".walletdetails.WalletDetailsFragment"
+                        tools:listitem="@layout/transaction_history_entry" />
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
             </LinearLayout>
+
         </FrameLayout>
 
     </LinearLayout>
