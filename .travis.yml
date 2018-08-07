@@ -19,7 +19,7 @@ before_script:
   # Get secret files from environment variables
 
   # gcloud service account for fastlane
-  - echo $GCLOUD_SERVICE_ACCOUNT_KEY > service_account_key.json
+  - echo $GCLOUD_SERVICE_ACCOUNT_KEY | base64 --decode > service_account_key.json
 
   # keystore for signing
   - echo $KEYSTORE_BASE64 | base64 --decode > tmp-keystore.jks
