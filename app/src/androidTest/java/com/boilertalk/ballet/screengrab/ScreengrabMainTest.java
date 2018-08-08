@@ -115,6 +115,9 @@ public class ScreengrabMainTest {
         createAccount("\"Pharmaceutical\" incomes");
         createAccount("Trading account");
 
+        // Wallet list screenshot
+        Screengrab.screenshot("wallet_list_screen");
+
         ViewInteraction linearLayout2 = onView(
                 allOf(childAtPosition(
                         childAtPosition(
