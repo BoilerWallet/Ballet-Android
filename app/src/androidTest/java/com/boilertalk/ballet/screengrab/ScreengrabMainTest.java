@@ -20,16 +20,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import tools.fastlane.screengrab.Screengrab;
+import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -45,6 +48,8 @@ public class ScreengrabMainTest {
 
     @Test
     public void createAccountTest() {
+        Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
+
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.editText_pass),
                         childAtPosition(
@@ -75,15 +80,8 @@ public class ScreengrabMainTest {
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("123shithole"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.editText_passconfirm), withText("123shithole"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.design.widget.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText4.perform(pressImeActionButton());
+        // Close keyboard
+        onView(isRoot()).perform(pressBack());
 
         // Register Screen screenshot
         Screengrab.screenshot("register_screen");
