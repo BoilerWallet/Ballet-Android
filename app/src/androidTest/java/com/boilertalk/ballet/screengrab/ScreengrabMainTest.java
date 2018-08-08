@@ -175,6 +175,9 @@ public class ScreengrabMainTest {
                                 0),
                         isDisplayed()));
         textView.check(matches(withText("Grocery budget")));
+
+        // Receive list screenshot
+        Screengrab.screenshot("receive_screen");
     }
 
     private void createAccount(String name) {
