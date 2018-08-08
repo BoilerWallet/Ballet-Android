@@ -32,7 +32,13 @@ before_script:
 script:
   # Output something every 10 minutes or Travis kills the job
   - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
-  - bundle exec fastlane beta
+
+  # Run tests always
+  - bundle exec fastlane test
+
+  # Deploy a beta release only for non pull request builds
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bundle exec fastlane beta; fi'
+
   # Killing background sleep loop
   - kill %1
 branches:
