@@ -188,3 +188,6 @@ fastlane/test_output
 fastlane/readme.md
 
 fastlane/metadata/android/*/images/
+
+# kotlin
+.idea/kotlinc.xml
