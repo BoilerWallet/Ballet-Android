@@ -191,3 +191,6 @@ fastlane/metadata/android/*/images/
 
 # kotlin
 .idea/kotlinc.xml
+
+# .idea directory
+.idea
