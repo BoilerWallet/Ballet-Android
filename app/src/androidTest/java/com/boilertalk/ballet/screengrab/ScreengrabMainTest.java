@@ -1,6 +1,13 @@
 package com.boilertalk.ballet.screengrab;
 
 
+import android.support.annotation.CheckResult;
+import android.support.test.espresso.AmbiguousViewMatcherException;
+import android.support.test.espresso.FailureHandler;
+import android.support.test.espresso.NoMatchingRootException;
+import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -38,6 +45,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsInstanceOf.any;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -70,18 +78,19 @@ public class ScreengrabMainTest {
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("123shithole"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.editText_passconfirm),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.design.widget.TextInputLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText3.perform(replaceText("123shithole"), closeSoftKeyboard());
+        try {
+            ViewInteraction appCompatEditText3 = onView(
+                    allOf(withId(R.id.editText_passconfirm),
+                            childAtPosition(
+                                    childAtPosition(
+                                            withClassName(is("android.support.design.widget.TextInputLayout")),
+                                            0),
+                                    0),
+                            isDisplayed()));
+            appCompatEditText3.perform(replaceText("123shithole"), closeSoftKeyboard());
+        } catch (Exception e) {
 
-        // Close keyboard
-        onView(isRoot()).perform(pressBack());
+        }
 
         // Register Screen screenshot
         Screengrab.screenshot("register_screen");
