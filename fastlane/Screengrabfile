@@ -17,5 +17,5 @@ clear_previous_screenshots(true)
 # Don't open the summary after running screengrab
 skip_open_summary(true)
 
-# Automatically delete app before capturing screenshots
-reinstall_app(true)
+# Automatically delete app before capturing screenshots (currently unavailable)
+# reinstall_app(true)
