@@ -35,6 +35,10 @@ public class EthGasStationAPI {
         double fastPrice;
         double averagePrice;
         double safeLowPrice;
+        double fastestTime;
+        double fastTime;
+        double averageTime;
+        double safeLowTime;
         EthGasInfo result = null;
         try {
             JSONObject jsoob = new JSONObject(res);
@@ -43,7 +47,14 @@ public class EthGasStationAPI {
             averagePrice = jsoob.getDouble("average");
             safeLowPrice = jsoob.getDouble("safeLow");
 
-            result = new EthGasInfo(fastestPrice, fastPrice, averagePrice, safeLowPrice);
+            fastestTime = jsoob.getDouble("fastestWait");
+            fastTime = jsoob.getDouble("fastWait");
+            averageTime = jsoob.getDouble("avgWait");
+            safeLowTime = jsoob.getDouble("safeLowWait");
+
+
+            result = new EthGasInfo(fastestPrice, fastPrice, averagePrice, safeLowPrice,
+                                    fastestTime, fastTime, averageTime, safeLowTime);
         } catch (JSONException e) {
             e.printStackTrace();
         }

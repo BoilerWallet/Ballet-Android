@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/about_to_send"
+            android:gravity="center"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/sender_blockie"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sender_addr"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/ic_arrow_forward" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/send_amount"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/receiver_blockie"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/receiver_addr"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/receiver_address_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_confirm_to_address_addr"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/sender_address_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_confirm_from_address_addr"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_amount_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_confirm_amount_to_send_amount"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_sender_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account Balance: $BALANCE$"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_coin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Coin: $COIN$"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_network"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Network: $NETWORK$"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_gas_limit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gas Limit: $GASLIMIT$"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_gas_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gas Price: $GASPRICE$"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_max_fee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Max TX Fee: $FEE$"
+            android:layout_margin="4dp"/>
+
+        <TextView
+            android:id="@+id/send_nonce"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nonce: $NONCE$"
+            android:layout_margin="4dp"/>
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="right|bottom">
+
+                <Button
+                    android:id="@+id/send_confirm_cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="100dp"
+                    android:text="@string/cancel"
+                    android:textColor="@color/light_text_primary"
+                    android:theme="@style/GrayRaisedButton"
+                    android:layout_marginRight="8dp"/>
+
+                <Button
+                    android:id="@+id/send_confirm_send_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="100dp"
+                    android:text="@string/send"
+                    android:textColor="@color/light_text_primary"
+                    android:theme="@style/DefaultRaisedButton" />
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+</ScrollView>

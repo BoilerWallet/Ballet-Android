@@ -54,5 +54,17 @@
     <string name="send_fast_speed">Fast</string>
     <string name="send_fastest_speed">Fastest</string>
     <string name="select_your_account">Select Your Account</string>
+    <string name="unit_seconds">sec</string>
+    <string name="unit_minutes">min</string>
+    <string name="unit_hours">h</string>
+    <string name="about_to_send">Yo are about to send...</string>
+    <string name="cancel">cancel</string>
+    <string name="send_invalid_receiver_addr">Invalid receiver address</string>
+    <string name="send_invalid_gas_limit">Invalid gas limit</string>
+    <string name="send_invalid_amount">Invalid amount</string>
+    <string name="send_no_src_wallet">Please select an account to send from</string>
+    <string name="send_confirm_to_address_addr">To Address: $ADDR$</string>
+    <string name="send_confirm_from_address_addr">From Address: $ADDR$</string>
+    <string name="send_confirm_amount_to_send_amount">Amount to Send: $AMOUNT$</string>
     <!-- Section End -->
 </resources>
