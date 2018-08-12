@@ -66,5 +66,6 @@
     <string name="send_confirm_to_address_addr">To Address: $ADDR$</string>
     <string name="send_confirm_from_address_addr">From Address: $ADDR$</string>
     <string name="send_confirm_amount_to_send_amount">Amount to Send: $AMOUNT$</string>
+    <string name="receive_account">ACCOUNT</string>
     <!-- Section End -->
 </resources>

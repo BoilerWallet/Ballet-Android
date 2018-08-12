@@ -80,11 +80,13 @@ public class LoginActivity extends AppCompatActivity {
                             return bcryptString;
                         });
                         newpwt.setPostExecuteCompletion((bcryptString) -> {
-                            //Log.d("lllll", "pass " + passwordText.getText().toString());
+                            VariableHolder.getInstance().setPassword(passwordText.getText().toString());
+                            //"delete" password in activity
                             passwordText.setText("");
                             passwordConfirmText.setText("");
-
-                            pd.dismiss();
+                            Intent navPageIntent = new Intent(getApplicationContext(), NavigationActivity.class);
+                            startActivity(navPageIntent);
+                            finish();
                         });
                         newpwt.execute(passwordText.getText().toString());
                         
@@ -109,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
                             VariableHolder.getInstance().setPassword(passwordText.getText().toString());
                             //"delete" password in activity
                             passwordText.setText("");
-                            pd.dismiss();
                             Intent navPageIntent = new Intent(getApplicationContext(), NavigationActivity.class);
                             startActivity(navPageIntent);
                             finish();

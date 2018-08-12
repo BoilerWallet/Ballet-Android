@@ -3,6 +3,7 @@ package com.boilertalk.ballet.toolbox;
 
 import android.support.annotation.NonNull;
 
+import com.boilertalk.ballet.database.RPCUrl;
 import com.boilertalk.ballet.database.Wallet;
 
 import org.web3j.crypto.CipherException;
@@ -14,8 +15,14 @@ import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class VariableHolder {
 
@@ -27,34 +34,25 @@ public class VariableHolder {
 
     private VariableHolder() {}
 
+    // Properties
+
     private String password;
-    private Web3j web3jInstance = null;
     private HashMap<UUID, LoadedWallet> loadedWallets = new HashMap<>();
 
     public String getPassword() {
         return password;
     }
 
+    // Getters
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public Web3j getWeb3j() {
-        if(web3jInstance == null) {
-            web3jInstance = Web3jFactory.build(new HttpService("https://ropsten.infura.io/m6d0dZdIbdR5d6bvHDQj"));
-        }
-        return web3jInstance;
-    }
-
-    public interface LoadedWalletCompletion {
-
-        void loaded(LoadedWallet result);
-    }
-
-    public void getLoadedWallet(@NonNull String keystorePath, @NonNull Wallet wallet, @NonNull LoadedWalletCompletion completion) {
+    public void getLoadedWallet(@NonNull String keystorePath, @NonNull Wallet wallet, @NonNull iResult<LoadedWallet> completion) {
         LoadedWallet loadedWallet = loadedWallets.get(wallet.getUuid());
         if (loadedWallet != null) {
-            completion.loaded(loadedWallet);
+            completion.onResult(loadedWallet);
             return;
         }
 
@@ -83,7 +81,7 @@ public class VariableHolder {
 
             return null;
         });
-        task.setPostExecuteCompletion(completion::loaded);
+        task.setPostExecuteCompletion(completion::onResult);
 
         task.execute(wallet);
     }
@@ -114,5 +112,100 @@ public class VariableHolder {
         public String checksumAddress() {
             return Keys.toChecksumAddress(credentials.getAddress());
         }
+    }
+
+    // RPC stuff
+
+    /**
+     * Creates and returns the default mainnet RPCUrl.
+     * <p>
+     * The given instance of <code>Realm</code> should have an active started transaction.
+     *
+     * @param realm The instance of realm to be used for instance creation.
+     * @return The default mainnet RPCUrl.
+     */
+    private RPCUrl defaultMainnetRPCUrl(Realm realm) {
+        RPCUrl mainnet = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
+        mainnet.setName("Infura Mainnet");
+        mainnet.setUrl("https://mainnet.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        mainnet.setChainId(1);
+        mainnet.setActive(true);
+
+        return mainnet;
+    }
+
+    /**
+     * Creates and returns a list of default RPCUrls for this app.
+     * <p>
+     * The given instance of <code>Realm</code> should have an active started transaction.
+     *
+     * @param realm The instance of realm to be used for instance creation.
+     * @return The list of default RPCUrls.
+     */
+    private List<RPCUrl> defaultRPCUrls(Realm realm) {
+        RPCUrl mainnet = defaultMainnetRPCUrl(realm);
+
+        RPCUrl ropsten = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
+        ropsten.setName("Infura Ropsten");
+        ropsten.setUrl("https://ropsten.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        ropsten.setChainId(3);
+        ropsten.setActive(false);
+
+        RPCUrl rinkeby = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
+        rinkeby.setName("Infura Rinkeby");
+        rinkeby.setUrl("https://rinkeby.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        rinkeby.setChainId(4);
+        rinkeby.setActive(false);
+
+        RPCUrl kovan = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
+        kovan.setName("Infura Kovan");
+        kovan.setUrl("https://kovan.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        kovan.setChainId(42);
+        kovan.setActive(false);
+
+        List<RPCUrl> urls = new ArrayList<RPCUrl>();
+
+        // Add default rpc urls
+        urls.add(mainnet);
+        urls.add(ropsten);
+        urls.add(rinkeby);
+        urls.add(kovan);
+
+        return urls;
+    }
+
+    /**
+     * Returns the current active RPCUrl, adding defaults if not added yet.
+     *
+     * @return The active RPCUrl.
+     */
+    public RPCUrl activeUrl() {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<RPCUrl> urls = realm.where(RPCUrl.class).findAll();
+        if (urls.size() == 0) {
+            // Add default urls
+
+            // Begin realm transaction
+            realm.beginTransaction();
+
+            // Create default RPCUrls
+            List<RPCUrl> newUrls = defaultRPCUrls(realm);
+
+            // Done with realm
+            realm.commitTransaction();
+        }
+
+        return realm.where(RPCUrl.class).equalTo("isActive", true).findFirst();
+    }
+
+    /**
+     * Returns the currently active (selected) instance of Web3j to be used for all calls within
+     * the app.
+     *
+     * @return The instance of Web3j to be used in this app.
+     */
+    public Web3j activeWeb3j() {
+        return Web3jFactory.build(new HttpService(activeUrl().getUrl()));
     }
 }

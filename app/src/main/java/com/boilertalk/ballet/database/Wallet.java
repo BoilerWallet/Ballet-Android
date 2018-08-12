@@ -7,16 +7,17 @@ import org.web3j.crypto.Keys;
 import java.util.UUID;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 public class Wallet extends RealmObject {
+
+    @PrimaryKey @Index @Required private String s_uuid;
+
     private String WalletFileName;
     private String WalletName;
-    private String s_uuid;
     private String address;
-
-    public Wallet() {
-        s_uuid = UUID.randomUUID().toString();
-    }
 
     public String getWalletFileName() {
         return WalletFileName;

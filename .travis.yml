@@ -1,0 +1,46 @@
+language: android
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-27.0.3
+
+    # The SDK version used to compile your project
+    - android-26
+
+    # For the emulator
+    - sys-img-armeabi-v7a-android-26
+before_install:
+  - bundle install
+before_script:
+  # Get secret files from environment variables
+
+  # gcloud service account for fastlane
+  - echo $GCLOUD_SERVICE_ACCOUNT_KEY | base64 --decode > service_account_key.json
+
+  # keystore for signing
+  - echo $KEYSTORE_BASE64 | base64 --decode > tmp-keystore.jks
+  # keystore copy for gradle
+  - cp tmp-keystore.jks app/
+
+  # fabric.properties
+  - echo apiKey=$(echo $FABRIC_API_TOKEN) > app/fabric.properties
+  - echo apiSecret=$(echo $FABRIC_BUILD_SECRET) >> app/fabric.properties
+script:
+  # Output something every 10 minutes or Travis kills the job
+  - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
+
+  # Run tests always
+  - bundle exec fastlane test
+
+  # Deploy a beta release only for non pull request builds
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bundle exec fastlane beta; fi'
+
+  # Killing background sleep loop
+  - kill %1
+branches:
+  only:
+    - master

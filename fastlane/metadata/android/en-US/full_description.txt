@@ -1,0 +1,6 @@
+An Ethereum and ERC20 Wallet. Native code for fast performance!
+
+* Track all ERC20 tokens you want!
+* Select different Testnets and custom networks.
+* Manage as many wallets as you need.
+* Encrypted by default with a strong password you chose.

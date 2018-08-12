@@ -177,3 +177,20 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/android,androidstudio
 
+# Ignore service account key for fastlane
+service_account_key.json
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md
+
+fastlane/metadata/android/*/images/
+
+# kotlin
+.idea/kotlinc.xml
+
+# .idea directory
+.idea
