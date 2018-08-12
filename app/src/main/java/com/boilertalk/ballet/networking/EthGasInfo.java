@@ -53,7 +53,7 @@ public class EthGasInfo {
         price = Convert.fromWei(Convert.toWei(new BigDecimal(gwei), Convert.Unit.GWEI), Convert.Unit.ETHER).round(mc).toPlainString();
         return context.getString(R.string.send_gas_price_fmt)
                 .replace("$SPEED$", speed)
-                .replace("$PRICE$", price + " " + context.getString(R.string.send_dimens_ETH))
+                .replace("$PRICE$", price + " " + context.getString(R.string.unit_ETH))
                 .replace("$WAIT$", wait);
     }
 

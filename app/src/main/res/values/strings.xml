@@ -46,7 +46,7 @@
     <string name="send_receiver_address">Receiver Address</string>
     <string name="send_amount">Amount</string>
     <string name="send_gas_limit">Gas Limit</string>
-    <string name="send_dimens_ETH">ETH</string>
+    <string name="unit_ETH"> ETH</string>
     <string name="send_fee">Fee</string>
     <string name="send_gas_price_fmt">$SPEED$, $WAIT$ - $PRICE$</string>
     <string name="send_low_speed">Low</string>
@@ -67,5 +67,13 @@
     <string name="send_confirm_from_address_addr">From Address: $ADDR$</string>
     <string name="send_confirm_amount_to_send_amount">Amount to Send: $AMOUNT$</string>
     <string name="receive_account">ACCOUNT</string>
+    <string name="send_confirm_sender_balance">Account Balance: $BALANCE$</string>
+    <string name="send_confirm_coin_coin">Coin: $COIN$</string>
+    <string name="send_confirm_network_network">Network: $NETWORK$</string>
+    <string name="send_confirm_gas_limit_gaslimit">Gas Limit: $GASLIMIT$</string>
+    <string name="send_confirm_gas_price_gasprice">Gas Price: $GASPRICE$</string>
+    <string name="send_confirm_max_tx_fee_fee">Max TX Fee: $FEE$</string>
+    <string name="send_confirm_nonce_nonce">Nonce: $NONCE$</string>
+    <string name="unit_gwei"> gwei</string>
     <!-- Section End -->
 </resources>

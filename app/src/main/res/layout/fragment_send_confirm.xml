@@ -38,7 +38,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/sender_addr"/>
+                    android:id="@+id/sender_addr"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -57,7 +60,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/send_amount"/>
+                    android:id="@+id/send_amount"
+                    android:gravity="center" />
             </LinearLayout>
 
             <LinearLayout
@@ -75,7 +79,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/receiver_addr"/>
+                    android:id="@+id/receiver_addr"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:gravity="center"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -85,14 +92,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_confirm_to_address_addr"
-            android:layout_margin="4dp"/>
+            android:layout_margin="4dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/sender_address_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_confirm_from_address_addr"
-            android:layout_margin="4dp"/>
+            android:layout_margin="4dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/send_amount_2"
@@ -105,49 +116,51 @@
             android:id="@+id/send_sender_balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Account Balance: $BALANCE$"
+            android:text="@string/send_confirm_sender_balance"
             android:layout_margin="4dp"/>
 
         <TextView
             android:id="@+id/send_coin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Coin: $COIN$"
+            android:text="@string/send_confirm_coin_coin"
             android:layout_margin="4dp"/>
 
         <TextView
             android:id="@+id/send_network"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Network: $NETWORK$"
-            android:layout_margin="4dp"/>
+            android:text="@string/send_confirm_network_network"
+            android:layout_margin="4dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/send_gas_limit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gas Limit: $GASLIMIT$"
+            android:text="@string/send_confirm_gas_limit_gaslimit"
             android:layout_margin="4dp"/>
 
         <TextView
             android:id="@+id/send_gas_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Gas Price: $GASPRICE$"
+            android:text="@string/send_confirm_gas_price_gasprice"
             android:layout_margin="4dp"/>
 
         <TextView
             android:id="@+id/send_max_fee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Max TX Fee: $FEE$"
+            android:text="@string/send_confirm_max_tx_fee_fee"
             android:layout_margin="4dp"/>
 
         <TextView
             android:id="@+id/send_nonce"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nonce: $NONCE$"
+            android:text="@string/send_confirm_nonce_nonce"
             android:layout_margin="4dp"/>
 
 
