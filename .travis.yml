@@ -25,10 +25,20 @@ before_script:
   - echo $KEYSTORE_BASE64 | base64 --decode > tmp-keystore.jks
   # keystore copy for gradle
   - cp tmp-keystore.jks app/
+
+  # fabric.properties
+  - echo apiKey=$(echo $FABRIC_API_TOKEN) > app/fabric.properties
+  - echo apiSecret=$(echo $FABRIC_BUILD_SECRET) >> app/fabric.properties
 script:
   # Output something every 10 minutes or Travis kills the job
   - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
-  - bundle exec fastlane beta
+
+  # Run tests always
+  - bundle exec fastlane test
+
+  # Deploy a beta release only for non pull request builds
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bundle exec fastlane beta; fi'
+
   # Killing background sleep loop
   - kill %1
 branches:

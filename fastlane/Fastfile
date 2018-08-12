@@ -21,8 +21,19 @@ platform :android do
     gradle(task: 'test')
   end
 
+  desc 'Generate screenshots'
+  lane :screenshots do
+    gradle(
+      task: 'clean assembleDebug assembleAndroidTest'
+    )
+    capture_android_screenshots
+  end
+
   desc 'Submit a new Beta Build to Crashlytics Beta and Play Beta'
   lane :beta do
+    # First of all generate screenshots
+    screenshots
+
     # Build app
     gradle(
       task: 'clean assemble',
