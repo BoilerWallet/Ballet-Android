@@ -1,11 +1,15 @@
 package com.boilertalk.ballet.send;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -13,17 +17,26 @@ import android.widget.TextView;
 
 import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.database.Wallet;
+import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
 import com.boilertalk.ballet.toolbox.GeneralAsyncTask;
 import com.boilertalk.ballet.toolbox.VariableHolder;
+import com.boilertalk.ballet.toolbox.iResult;
 
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +61,8 @@ public class SendConfirmFragment extends DialogFragment {
     @BindView(R.id.send_nonce)          TextView nonceTextView;
     @BindView(R.id.send_confirm_cancel_button)  Button cancelButton;
     @BindView(R.id.send_confirm_send_button)    Button sendButton;
+
+    BigInteger nonce = null;
 
 
     public SendConfirmFragment() {
@@ -81,16 +96,16 @@ public class SendConfirmFragment extends DialogFragment {
         senderBlockieImageView.setImageBitmap(blockiebmp);
         String receiverAddress = getArguments().getString("receiverAddress");
         blockiebmp = Bitmap.createScaledBitmap(
-                new EtherBlockies(receiverAddress.toLowerCase().toCharArray(),8, 4).getBitmap(),
+                new EtherBlockies(receiverAddress.toLowerCase().toCharArray(), 8, 4).getBitmap(),
                 ConvertHelper.dpToPixels(56, getResources()), ConvertHelper.dpToPixels(56, getResources()),
                 false
         );
         receiverBlockieImageView.setImageBitmap(blockiebmp);
 
         senderAddressTextView.setText(senderWallet.checksumAddress());
-        senderAddressTextView2.setText(getString(R.string.send_confirm_from_address_addr).replace("$ADDR$",senderWallet.checksumAddress()));
+        senderAddressTextView2.setText(getString(R.string.send_confirm_from_address_addr).replace("$ADDR$", senderWallet.checksumAddress()));
         receiverAddressTextView.setText(receiverAddress);
-        receiverAddressTextView2.setText(getString(R.string.send_confirm_to_address_addr).replace("$ADDR$",receiverAddress));
+        receiverAddressTextView2.setText(getString(R.string.send_confirm_to_address_addr).replace("$ADDR$", receiverAddress));
 
         BigDecimal sendAmount = (BigDecimal) getArguments().getSerializable("amount");
         sendAmountTextView.setText(sendAmount.toPlainString() + getString(R.string.unit_ETH));
@@ -98,7 +113,7 @@ public class SendConfirmFragment extends DialogFragment {
 
         GeneralAsyncTask<String, String> gbat = new GeneralAsyncTask<>();
         gbat.setBackgroundCompletion((addresses) -> {
-            if(addresses.length != 1) {
+            if (addresses.length != 1) {
                 return null;
             }
             BigInteger bi = null;
@@ -107,7 +122,7 @@ public class SendConfirmFragment extends DialogFragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(bi != null) {
+            if (bi != null) {
                 return Convert.fromWei(bi.toString(), Convert.Unit.ETHER).toString();
             } else {
                 return null;
@@ -133,7 +148,7 @@ public class SendConfirmFragment extends DialogFragment {
                 .replace("$FEE$", Convert.fromWei(Convert.toWei(maxTxFee.toPlainString(), Convert.Unit.GWEI), Convert.Unit.ETHER).toPlainString() + getString(R.string.unit_ETH)));
         GeneralAsyncTask<String, String> gnat = new GeneralAsyncTask<>();
         gnat.setBackgroundCompletion((addresses) -> {
-            if(addresses.length != 1) {
+            if (addresses.length != 1) {
                 return null;
             }
             BigInteger nonce = null;
@@ -146,33 +161,84 @@ public class SendConfirmFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
-            if(nonce == null) {
+            if (nonce == null) {
                 return null;
             } else {
                 return nonce.toString();
             }
 
         });
-        gnat.setPostExecuteCompletion((nonce) ->
+        final View.OnClickListener ocl = (view1) -> {
+            //TODO send transaction
+            RawTransaction rt = RawTransaction.createEtherTransaction(
+                    nonce,
+                    Convert.toWei(gasPrice, Convert.Unit.GWEI).toBigInteger(),
+                    BigInteger.valueOf(gasLimit),
+                    receiverAddress,
+                    Convert.toWei(sendAmount, Convert.Unit.ETHER).toBigInteger()
+            );
+            final ProgressDialog pd = ProgressDialog.show(view1.getContext(), getString(R.string.loading_), getString(R.string.send_confirm_decrypting_wallet));
+            VariableHolder.getInstance().getLoadedWallet(
+                    getContext().getDir(ConstantHolder.WALETFILES_FOLDER, Context.MODE_PRIVATE).getAbsolutePath() + "/" + senderWallet.getWalletFileName(),
+                    senderWallet,
+                    new iResult<VariableHolder.LoadedWallet>() {
+                @Override
+                public void onResult(VariableHolder.LoadedWallet result) {
+                    pd.dismiss();
+                    byte[] signedMessage = TransactionEncoder.signMessage(rt, result.getCredentials());
+                    String hexValue = Numeric.toHexString(signedMessage);
+                    final ProgressDialog pdd = ProgressDialog.show(view1.getContext(), getString(R.string.loading_), getString(R.string.send_confirm_send_signed_transaction));
+                    GeneralAsyncTask<String, TransactionReceipt> sendTask = new GeneralAsyncTask<>();
+                    sendTask.setBackgroundCompletion((hexValueS) -> {
+                        if(hexValueS.length != 1) {
+                            return null;
+                        }
+                        try {
+                            EthSendTransaction ethSendTransaction =
+                                    VariableHolder.getInstance().activeWeb3j()
+                                            .ethSendRawTransaction(hexValueS[0]).sendAsync().get();
+                            String txHash = ethSendTransaction.getTransactionHash();
+                            TransactionReceipt tr = VariableHolder.getInstance().activeWeb3j()
+                                    .ethGetTransactionReceipt(txHash).sendAsync().get()
+                                    .getTransactionReceipt();
+                            return tr;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    });
+                    sendTask.setPostExecuteCompletion((tr) -> {
+                        pdd.dismiss();
+                        if(tr == null) {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), 0,
+                                    new Intent());
+                            Log.d("sendconfirm", "fail");
+                        } else {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), 1,
+                                    new Intent());
+                            Log.d("sendconfirm", "success blocknr: " + tr.getBlockNumber());
+                        }
+                    });
+                    sendTask.execute(hexValue);
+
+                    dismiss();
+                }
+            });
+        };
+        gnat.setPostExecuteCompletion((nonce) -> {
                 nonceTextView.setText(getString(R.string.send_confirm_nonce_nonce)
-                        .replace("$NONCE$", nonce)));
+                        .replace("$NONCE$", nonce));
+                sendButton.setOnClickListener(ocl);
+                this.nonce = new BigInteger(nonce);
+        });
         gnat.execute(senderWallet.getAddress());
 
         //marquee sht
         senderAddressTextView2.setSelected(true);
         receiverAddressTextView2.setSelected(true);
         networkTextView.setSelected(true);
-
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO send transaction
-                getTargetFragment().onActivityResult(getTargetRequestCode(), 1,
-                        new Intent());
-                dismiss();
-            }
-        });
 
         builder.setView(view);
         return builder.create();

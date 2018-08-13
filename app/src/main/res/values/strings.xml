@@ -75,5 +75,7 @@
     <string name="send_confirm_max_tx_fee_fee">Max TX Fee: $FEE$</string>
     <string name="send_confirm_nonce_nonce">Nonce: $NONCE$</string>
     <string name="unit_gwei"> gwei</string>
+    <string name="send_confirm_decrypting_wallet">Decrypting walletfile for signing...</string>
+    <string name="send_confirm_send_signed_transaction">Sending signed transaction to node...</string>
     <!-- Section End -->
 </resources>

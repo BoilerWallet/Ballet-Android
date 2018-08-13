@@ -205,7 +205,12 @@ public class SendFragment extends Fragment {
                 }
                 break;
             case RC_SEND_CONFIRM:
-                //TODO clear values because send is done
+                if(resultCode == 1) {
+                    //TODO clear values because send is done
+                    Snackbar.make(sendButton, "Send seems to have succeeded.", Snackbar.LENGTH_INDEFINITE).show();
+                } else {
+                    Snackbar.make(sendButton, "Send seems to have failed", Snackbar.LENGTH_INDEFINITE).show();
+                }
                 break;
             default:
                 return;
