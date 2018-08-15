@@ -78,4 +78,21 @@
     <string name="send_confirm_decrypting_wallet">Decrypting walletfile for signing...</string>
     <string name="send_confirm_send_signed_transaction">Sending signed transaction to node...</string>
     <!-- Section End -->
+
+    <!-- Settings strings -->
+    <string name="settings_general_title">General</string>
+    <string name="settings_select_network_title">Select Network</string>
+    <string name="settings_tracked_tokens_title">Tracked ERC20 Tokens</string>
+
+    <string name="settings_account_title">Account</string>
+    <string name="settings_change_password_title">Change Password</string>
+
+    <string name="settings_about_title">About</string>
+    <string name="settings_terms_and_conditions_title">Terms and Conditions</string>
+    <string name="settings_privacy_policy_title">Privacy Policy</string>
+    <string name="settings_open_source_libraries_title">Open Source Libraries</string>
+
+    <string name="settings_more_title">More</string>
+    <string name="settings_donate_title">Donate ⚗️</string>
+    <!-- End Settings strings -->
 </resources>
