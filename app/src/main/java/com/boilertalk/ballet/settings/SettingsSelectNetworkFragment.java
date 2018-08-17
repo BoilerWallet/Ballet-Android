@@ -84,7 +84,7 @@ public class SettingsSelectNetworkFragment extends Fragment {
                 } else if (url.isTestnet()) {
                     networkColor.setImageDrawable(getResources().getDrawable(R.drawable.network_circle_testnet));
                 } else {
-                    networkColor.setImageDrawable(getResources().getDrawable(R.drawable.network_color_custom));
+                    networkColor.setImageDrawable(getResources().getDrawable(R.drawable.network_circle_custom));
                 }
 
                 networkName.setText(url.getName());

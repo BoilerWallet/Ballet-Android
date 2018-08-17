@@ -73,4 +73,12 @@
     <string name="settings_more_title">More</string>
     <string name="settings_donate_title">Donate ⚗️</string>
     <!-- End Settings strings -->
+
+    <!-- Token tracker strings -->
+    <string name="settings_token_track_new">Track new ERC20 Token</string>
+    <string name="settings_token_erc20_address">ERC20 contract address</string>
+    <string name="settings_token_button_test">TEST</string>
+    <string name="settings_token_erc20_name">ERC20 contract name</string>
+    <string name="settings_token_button_save">SAVE</string>
+    <!-- End Token tracker strings -->
 </resources>

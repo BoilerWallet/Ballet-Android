@@ -3,6 +3,7 @@ package com.boilertalk.ballet.settings;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,21 +50,34 @@ public class SettingsFragment extends Fragment {
     void selectNetworkClicked() {
         SettingsSelectNetworkFragment selectNetworkFragment = new SettingsSelectNetworkFragment();
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.detach(this);
-        fragmentTransaction.setPrimaryNavigationFragment(selectNetworkFragment);
-        fragmentTransaction.add(R.id.navigation_content_view, selectNetworkFragment, "details");
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        showFragment(selectNetworkFragment);
     }
 
     @OnClick(R.id.settings_tracked_tokens_view)
     void trackedTokensClicked() {
+        SettingsTrackERC20TokensFragment trackERC20TokensFragment = new SettingsTrackERC20TokensFragment();
 
+        showFragment(trackERC20TokensFragment);
     }
 
     @OnClick(R.id.settings_change_password_view)
     void changePasswordClicked() {
 
+    }
+
+    // Helpers
+
+    private void showFragment(Fragment fragment) {
+        FragmentManager manager = getFragmentManager();
+        if (manager == null) {
+            return;
+        }
+
+        FragmentTransaction fragmentTransaction = manager.beginTransaction();
+        fragmentTransaction.detach(this);
+        fragmentTransaction.setPrimaryNavigationFragment(fragment);
+        fragmentTransaction.add(R.id.navigation_content_view, fragment, "details");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

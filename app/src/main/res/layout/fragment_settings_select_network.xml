@@ -11,6 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:context=".walletslist.WalletsListFragment"
+        tools:context=".settings.SettingsSelectNetworkFragment"
         tools:listitem="@layout/fragment_settings_select_network_entry" />
 </LinearLayout>
