@@ -11,16 +11,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.boilertalk.ballet.R;
+import com.boilertalk.ballet.database.ERC20TrackedToken;
 import com.boilertalk.ballet.database.RPCUrl;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class SettingsFragment extends Fragment {
 
     @BindView(R.id.settings_select_network_subtitle) TextView selectedNetwork;
+    @BindView(R.id.settings_tracked_erc20_tokens_subtitle) TextView tokensCount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,9 +43,17 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Set active url name
         RPCUrl url = VariableHolder.getInstance().activeUrl();
+
+        // Set active url name
         selectedNetwork.setText(url.getName());
+
+        // Set tokens count
+        long tc = Realm.getDefaultInstance()
+                .where(ERC20TrackedToken.class)
+                .equalTo("rpcUrlID", url.getUuid().toString())
+                .count();
+        tokensCount.setText("" + tc);
     }
 
     // Actions
