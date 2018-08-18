@@ -175,7 +175,7 @@ public class SettingsTrackNewERC20TokenFragment extends DialogFragment {
             namePreview.setText(nameText);
 
             // Total supply
-            String supplyText = "Total supply: " + o.totalSupply.toString();
+            String supplyText = getString(R.string.settings_token_total_supply, o.totalSupply.toString());
             totalSupplyPreview.setText(supplyText);
 
             // Blockies

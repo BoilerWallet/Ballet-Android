@@ -80,5 +80,7 @@
     <string name="settings_token_button_test">TEST</string>
     <string name="settings_token_erc20_name">ERC20 contract name</string>
     <string name="settings_token_button_save">SAVE</string>
+
+    <string name="settings_token_total_supply">Total supply: %1$s</string>
     <!-- End Token tracker strings -->
 </resources>
