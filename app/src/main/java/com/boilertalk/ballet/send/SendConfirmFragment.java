@@ -26,6 +26,7 @@ import com.boilertalk.ballet.toolbox.iResult;
 
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -123,7 +124,7 @@ public class SendConfirmFragment extends DialogFragment {
                 e.printStackTrace();
             }
             if (bi != null) {
-                return Convert.fromWei(bi.toString(), Convert.Unit.ETHER).toString();
+                return Convert.fromWei(new BigDecimal(bi), Convert.Unit.ETHER).toString();
             } else {
                 return null;
             }
@@ -188,7 +189,7 @@ public class SendConfirmFragment extends DialogFragment {
                     byte[] signedMessage = TransactionEncoder.signMessage(rt, result.getCredentials());
                     String hexValue = Numeric.toHexString(signedMessage);
                     final ProgressDialog pdd = ProgressDialog.show(view1.getContext(), getString(R.string.loading_), getString(R.string.send_confirm_send_signed_transaction));
-                    GeneralAsyncTask<String, TransactionReceipt> sendTask = new GeneralAsyncTask<>();
+                    GeneralAsyncTask<String, String> sendTask = new GeneralAsyncTask<>();
                     sendTask.setBackgroundCompletion((hexValueS) -> {
                         if(hexValueS.length != 1) {
                             return null;
@@ -198,10 +199,12 @@ public class SendConfirmFragment extends DialogFragment {
                                     VariableHolder.getInstance().activeWeb3j()
                                             .ethSendRawTransaction(hexValueS[0]).sendAsync().get();
                             String txHash = ethSendTransaction.getTransactionHash();
-                            TransactionReceipt tr = VariableHolder.getInstance().activeWeb3j()
-                                    .ethGetTransactionReceipt(txHash).sendAsync().get()
-                                    .getTransactionReceipt();
-                            return tr;
+                            //stupid...
+                            // TransactionReceipt tr = VariableHolder.getInstance().activeWeb3j()
+                            //        .ethGetTransactionReceipt(txHash).sendAsync().get()
+                            //        .getTransactionReceipt();
+                            //return tr;
+                            return txHash;
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         } catch (ExecutionException e) {
@@ -209,16 +212,16 @@ public class SendConfirmFragment extends DialogFragment {
                         }
                         return null;
                     });
-                    sendTask.setPostExecuteCompletion((tr) -> {
+                    sendTask.setPostExecuteCompletion((txHash) -> {
                         pdd.dismiss();
-                        if(tr == null) {
+                        if(txHash == null) {
                             getTargetFragment().onActivityResult(getTargetRequestCode(), 0,
                                     new Intent());
                             Log.d("sendconfirm", "fail");
                         } else {
                             getTargetFragment().onActivityResult(getTargetRequestCode(), 1,
                                     new Intent());
-                            Log.d("sendconfirm", "success blocknr: " + tr.getBlockNumber());
+                            Log.d("sendconfirm", "success hash: " + txHash);
                         }
                     });
                     sendTask.execute(hexValue);

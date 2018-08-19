@@ -49,6 +49,7 @@
     <string name="unit_ETH"> ETH</string>
     <string name="send_fee">Fee</string>
     <string name="send_gas_price_fmt">$SPEED$, $WAIT$ - $PRICE$</string>
+    <string name="send_gas_price_fmt_nomainnet">$SPEED$, $PRICE$</string>
     <string name="send_low_speed">Low</string>
     <string name="send_average_speed">Average</string>
     <string name="send_fast_speed">Fast</string>
@@ -94,5 +95,7 @@
 
     <string name="settings_more_title">More</string>
     <string name="settings_donate_title">Donate ⚗️</string>
+    <string name="send_failure">Send failed.</string>
+    <string name="send_success">Send succeeded.</string>
     <!-- End Settings strings -->
 </resources>

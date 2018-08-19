@@ -3,6 +3,7 @@ package com.boilertalk.ballet.networking;
 import android.content.Context;
 
 import com.boilertalk.ballet.R;
+import com.boilertalk.ballet.toolbox.VariableHolder;
 
 import org.web3j.utils.Convert;
 
@@ -51,10 +52,18 @@ public class EthGasInfo {
         }
         MathContext mc = new MathContext(4);
         price = Convert.fromWei(Convert.toWei(new BigDecimal(gwei), Convert.Unit.GWEI), Convert.Unit.ETHER).round(mc).toPlainString();
-        return context.getString(R.string.send_gas_price_fmt)
-                .replace("$SPEED$", speed)
-                .replace("$PRICE$", price + " " + context.getString(R.string.unit_ETH))
-                .replace("$WAIT$", wait);
+
+        if(VariableHolder.getInstance().activeUrl().isMainnet()) {
+            return context.getString(R.string.send_gas_price_fmt)
+                    .replace("$SPEED$", speed)
+                    .replace("$PRICE$", price + " " + context.getString(R.string.unit_ETH))
+                    .replace("$WAIT$", wait);
+        } else {
+            return context.getString(R.string.send_gas_price_fmt_nomainnet)
+                    .replace("$SPEED$", speed)
+                    .replace("$PRICE$", price + " " + context.getString(R.string.unit_ETH));
+        }
+
     }
 
     private String timeString(Context context, double time) {

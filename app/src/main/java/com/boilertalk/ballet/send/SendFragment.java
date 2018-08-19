@@ -17,13 +17,17 @@ import android.widget.TextView;
 import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.database.Wallet;
 import com.boilertalk.ballet.networking.EthGasStationAPI;
+import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
+import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.walletslist.SelectWalletDialogFragment;
 
 import org.web3j.crypto.Keys;
+import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -89,40 +93,41 @@ public class SendFragment extends Fragment {
 
         }
 
-        //get fee info
-        EthGasStationAPI.async_getGasInfo((gasInfo) -> {
-            //set fee seeker
-            feeInput.setMax((int) Math.ceil((gasInfo.fastestPrice - gasInfo.safeLowPrice) * 1000000));
-            feeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    gasPriceSliderPos = i;
-                    feeInfoView.setText(gasInfo.getFormattedInfoString(context, (i/1000000.0)+gasInfo.safeLowPrice));
-                    gasPriceGwei = new BigDecimal((i/1000000.0)+gasInfo.safeLowPrice);
+            //get fee info
+            EthGasStationAPI.async_getGasInfo((gasInfo) -> {
+                //set fee seeker
+                feeInput.setMax((int) Math.ceil((gasInfo.fastestPrice - gasInfo.safeLowPrice) * 1000));
+                feeInput.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                        gasPriceSliderPos = i;
+                        feeInfoView.setText(gasInfo.getFormattedInfoString(context, (i / 1000.0) + gasInfo.safeLowPrice));
+                        gasPriceGwei = new BigDecimal((i / 1000.0) + gasInfo.safeLowPrice);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+                if (savedInstanceState != null) {
+                    gasPriceSliderPos = savedInstanceState.getInt("gasPriceSliderPos");
+                    feeInput.setProgress(gasPriceSliderPos);
+                    feeInfoView.setText(gasInfo.getFormattedInfoString(context, (gasPriceSliderPos / 1000.0) + gasInfo.safeLowPrice));
+                    gasPriceGwei = new BigDecimal((gasPriceSliderPos / 1000.0) + gasInfo.safeLowPrice);
+                } else {
+                    feeInput.setProgress((int) Math.ceil((gasInfo.averagePrice - gasInfo.safeLowPrice) * 1000));
+                    feeInfoView.setText(gasInfo.getFormattedInfoString(context, gasInfo.averagePrice));
+                    gasPriceGwei = new BigDecimal(gasInfo.averagePrice);
                 }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
             });
-            if(savedInstanceState != null) {
-                gasPriceSliderPos = savedInstanceState.getInt("gasPriceSliderPos");
-                feeInput.setProgress(gasPriceSliderPos);
-                feeInfoView.setText(gasInfo.getFormattedInfoString(context, (gasPriceSliderPos/1000000.0)+gasInfo.safeLowPrice));
-                gasPriceGwei = new BigDecimal((gasPriceSliderPos/1000000.0)+gasInfo.safeLowPrice);
-            } else {
-                feeInput.setProgress((int) Math.ceil((gasInfo.averagePrice - gasInfo.safeLowPrice) * 1000000));
-                feeInfoView.setText(gasInfo.getFormattedInfoString(context, gasInfo.averagePrice));
-                gasPriceGwei = new BigDecimal(gasInfo.averagePrice);
-            }
 
-        });
 
         selectAccountButton.setOnClickListener((view1) -> {
             SelectWalletDialogFragment swdf = new SelectWalletDialogFragment();
@@ -168,7 +173,6 @@ public class SendFragment extends Fragment {
                     return;
                 }
 
-                //TODO open send confirm view
                 SendConfirmFragment scf = new SendConfirmFragment();
                 Bundle arg = new Bundle();
                 arg.putString("senderUuid", selectedWallet.getUuid().toString());
@@ -206,10 +210,18 @@ public class SendFragment extends Fragment {
                 break;
             case RC_SEND_CONFIRM:
                 if(resultCode == 1) {
-                    //TODO clear values because send is done
-                    Snackbar.make(sendButton, "Send seems to have succeeded.", Snackbar.LENGTH_INDEFINITE).show();
+                    //clear values because send is done
+                    senderBlockieView.setImageBitmap(null);
+                    senderNameView.setText("");
+                    senderAddrView.setText("");
+                    receiverAddressInput.setText("");
+                    amountInput.setText("");
+                    gasLimitInput.setText("");
+                    selectedWallet = null;
+
+                    Snackbar.make(sendButton, R.string.send_success, Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Snackbar.make(sendButton, "Send seems to have failed", Snackbar.LENGTH_INDEFINITE).show();
+                    Snackbar.make(sendButton, R.string.send_failure, Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             default:
