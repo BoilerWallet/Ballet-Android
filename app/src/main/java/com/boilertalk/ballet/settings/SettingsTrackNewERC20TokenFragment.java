@@ -112,7 +112,6 @@ public class SettingsTrackNewERC20TokenFragment extends DialogFragment {
 
         // Check address checksum
         if (!Keys.toChecksumAddress(address.toLowerCase()).equals(address)) {
-            // TODO: Error handling
             contractAddressInputLayout.setError("Checksum didn't match");
             return;
         }
@@ -211,6 +210,7 @@ public class SettingsTrackNewERC20TokenFragment extends DialogFragment {
 
         String name = contractNameInput.getText().toString();
         if (name.isEmpty()) {
+            // TODO: Error
             return;
         }
 
