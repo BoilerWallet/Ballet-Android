@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_marginBottom="2dp"
+            android:padding="0dp"
+            app:cardCornerRadius="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_margin="16dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/selected_network_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/network_circle_mainnet" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Network Name"
+                    android:textColor="@color/dark_text_secondary"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:id="@+id/selected_network_name"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tokens_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:context=".settings.SettingsTrackERC20TokensFragment"
+            tools:listitem="@layout/fragment_settings_track_erc20_tokens_entry" />
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/settings_track_token_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/ic_add"
+        android:scaleType="fitXY"
+        android:tint="@color/light_text_primary"
+        app:backgroundTint="@color/colorAccent"/>
+
+</android.support.constraint.ConstraintLayout>

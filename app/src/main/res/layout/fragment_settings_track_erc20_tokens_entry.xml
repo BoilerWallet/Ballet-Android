@@ -14,16 +14,24 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_margin="16dp"
             android:layout_gravity="center">
 
-            <ImageView
-                android:id="@+id/network_entry_color"
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/network_circle_mainnet" />
+                app:civ_border_width="0dp"
+                android:visibility="gone"
+                android:id="@+id/blocky_image">
+            </de.hdodenhof.circleimageview.CircleImageView>
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminate="true"
+                android:id="@+id/image_progress_spinner"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -31,25 +39,26 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp">
 
             <TextView
-                android:id="@+id/network_entry_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Network Name"
+                android:text="Token Name"
                 android:textColor="@color/dark_text_primary"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:id="@+id/settings_track_entry_token_name" />
 
             <TextView
-                android:id="@+id/network_entry_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Network URL"
+                android:text="Token Address"
                 android:textColor="@color/dark_text_secondary"
                 android:ellipsize="marquee"
                 android:singleLine="true"
@@ -57,20 +66,8 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:layout_marginBottom="0dp"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:id="@+id/settings_track_entry_token_address" />
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="16dp"
-            android:layout_gravity="center">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/network_entry_checkbox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:lottie_rawRes="@raw/material_checkbox" />
-        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
