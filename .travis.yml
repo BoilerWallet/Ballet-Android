@@ -1,4 +1,9 @@
 language: android
+jdk:
+  - oraclejdk8
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=8
 android:
   components:
     - tools
@@ -14,8 +19,27 @@ android:
     # For the emulator
     - sys-img-x86-android-27
 before_install:
+  # Bundle for fastlane
   - bundle install
+
+  # Install SDK license so Android Gradle plugin can install deps.
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+  # Install the rest of tools (e.g., avdmanager).
+  - sdkmanager tools
+  # Install the system image.
+  - sdkmanager "system-images;android-27;default;x86"
+  # Create and start emulator for the script. Meant to race the install task.
+  - echo no | avdmanager create avd --force -n test -k "system-images;android-27;default;x86"
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window &
 before_script:
+  # Emulator shit
+  - android-wait-for-emulator
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+  - adb shell input keyevent 82 &
+
   # Get secret files from environment variables
 
   # gcloud service account for fastlane
@@ -29,12 +53,6 @@ before_script:
   # fabric.properties
   - echo apiKey=$(echo $FABRIC_API_TOKEN) > app/fabric.properties
   - echo apiSecret=$(echo $FABRIC_BUILD_SECRET) >> app/fabric.properties
-
-  # Create and Start Emulator
-  - echo no | android create avd --force -n test -t android-27 --abi x86
-  - emulator -avd test -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
 script:
   # Output something every 10 minutes or Travis kills the job
   - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
