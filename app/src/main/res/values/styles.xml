@@ -31,4 +31,9 @@
         <item name="colorControlHighlight">@color/colorAccentDark</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
     </style>
+
+    <style name="GrayRaisedButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/gray800</item>
+        <item name="colorButtonNormal">@color/gray700</item>
+    </style>
 </resources>
