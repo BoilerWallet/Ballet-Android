@@ -1,7 +1,4 @@
 language: android
-env:
-  global:
-    - export ANDROID_SDK_ROOT=$HOME/Android/Sdk
 android:
   components:
     - tools
