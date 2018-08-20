@@ -10,7 +10,7 @@
     <color name="colorAccent">@color/pink500</color>
     <color name="colorAccentLight">@color/pink400</color>
     <color name="colorAccentDark">@color/pink600</color>
-    <color name="backgroundColor">@color/grey50</color>
+    <color name="backgroundColor">@color/gray50</color>
 
     <!-- Cyan pallette -->
     <color name="cyan50">#E0F7FA</color>
@@ -100,16 +100,16 @@
     <color name="greenA700">#00c853</color>
 
     <!-- Grey pallette -->
-    <color name="grey50">#FAFAFA</color>
-    <color name="grey100">#F5F5F5</color>
-    <color name="grey200">#EEEEEE</color>
-    <color name="grey300">#E0E0E0</color>
-    <color name="grey400">#BDBDBD</color>
-    <color name="grey500">#9E9E9E</color>
-    <color name="grey600">#757575</color>
-    <color name="grey700">#616161</color>
-    <color name="grey800">#424242</color>
-    <color name="grey900">#212121</color>
+    <color name="gray50">#FAFAFA</color>
+    <color name="gray100">#F5F5F5</color>
+    <color name="gray200">#EEEEEE</color>
+    <color name="gray300">#E0E0E0</color>
+    <color name="gray400">#BDBDBD</color>
+    <color name="gray500">#9E9E9E</color>
+    <color name="gray600">#757575</color>
+    <color name="gray700">#616161</color>
+    <color name="gray800">#424242</color>
+    <color name="gray900">#212121</color>
 
     <!-- Orange pallette -->
     <color name="orange50">#FFF3E0</color>

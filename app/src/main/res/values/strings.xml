@@ -46,15 +46,38 @@
     <string name="send_receiver_address">Receiver Address</string>
     <string name="send_amount">Amount</string>
     <string name="send_gas_limit">Gas Limit</string>
-    <string name="send_dimens_ETH">ETH</string>
+    <string name="unit_ETH"> ETH</string>
     <string name="send_fee">Fee</string>
     <string name="send_gas_price_fmt">$SPEED$, $WAIT$ - $PRICE$</string>
+    <string name="send_gas_price_fmt_nomainnet">$SPEED$, $PRICE$</string>
     <string name="send_low_speed">Low</string>
     <string name="send_average_speed">Average</string>
     <string name="send_fast_speed">Fast</string>
     <string name="send_fastest_speed">Fastest</string>
     <string name="select_your_account">Select Your Account</string>
+    <string name="unit_seconds">sec</string>
+    <string name="unit_minutes">min</string>
+    <string name="unit_hours">h</string>
+    <string name="about_to_send">Yo are about to send...</string>
+    <string name="cancel">cancel</string>
+    <string name="send_invalid_receiver_addr">Invalid receiver address</string>
+    <string name="send_invalid_gas_limit">Invalid gas limit</string>
+    <string name="send_invalid_amount">Invalid amount</string>
+    <string name="send_no_src_wallet">Please select an account to send from</string>
+    <string name="send_confirm_to_address_addr">To Address: $ADDR$</string>
+    <string name="send_confirm_from_address_addr">From Address: $ADDR$</string>
+    <string name="send_confirm_amount_to_send_amount">Amount to Send: $AMOUNT$</string>
     <string name="receive_account">ACCOUNT</string>
+    <string name="send_confirm_sender_balance">Account Balance: $BALANCE$</string>
+    <string name="send_confirm_coin_coin">Coin: $COIN$</string>
+    <string name="send_confirm_network_network">Network: $NETWORK$</string>
+    <string name="send_confirm_gas_limit_gaslimit">Gas Limit: $GASLIMIT$</string>
+    <string name="send_confirm_gas_price_gasprice">Gas Price: $GASPRICE$</string>
+    <string name="send_confirm_max_tx_fee_fee">Max TX Fee: $FEE$</string>
+    <string name="send_confirm_nonce_nonce">Nonce: $NONCE$</string>
+    <string name="unit_gwei"> gwei</string>
+    <string name="send_confirm_decrypting_wallet">Decrypting walletfile for signing...</string>
+    <string name="send_confirm_send_signed_transaction">Sending signed transaction to node...</string>
     <!-- Section End -->
 
     <!-- Settings strings -->
@@ -72,5 +95,7 @@
 
     <string name="settings_more_title">More</string>
     <string name="settings_donate_title">Donate ⚗️</string>
+    <string name="send_failure">Send failed.</string>
+    <string name="send_success">Send succeeded.</string>
     <!-- End Settings strings -->
 </resources>
