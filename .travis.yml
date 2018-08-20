@@ -29,6 +29,12 @@ before_script:
   # fabric.properties
   - echo apiKey=$(echo $FABRIC_API_TOKEN) > app/fabric.properties
   - echo apiSecret=$(echo $FABRIC_BUILD_SECRET) >> app/fabric.properties
+
+  # Create and Start Emulator
+  - echo no | android create avd --force -n test -t android-27 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
 script:
   # Output something every 10 minutes or Travis kills the job
   - while sleep 60; do echo "=====[ $SECONDS seconds still running ]====="; done &
