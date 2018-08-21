@@ -30,6 +30,11 @@ public class EtherscanAPI {
         this.pageSize = pageSize;
     }
 
+    public void reset() {
+        currPage = 0;
+        firstBlockNr = 0;
+    }
+
     public ArrayList<EtherscanTransaction> getNextPage() {
         String res = null;
         ArrayList<EtherscanTransaction> page = new ArrayList<>();
@@ -62,8 +67,10 @@ public class EtherscanAPI {
                 JSONObject tx = jsar.getJSONObject(i);
                 EtherscanTransaction es = new EtherscanTransaction(tx.getLong("blockNumber"),
                         tx.getString("from"), tx.getString("to"), tx.getLong("value"), tx
-                        .getLong("timeStamp"));
-                page.add(es);
+                        .getLong("timeStamp"), tx.getString("hash"));
+                if(!page.contains(es)) {
+                    page.add(es);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

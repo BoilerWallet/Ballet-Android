@@ -6,11 +6,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -98,7 +98,6 @@ public class WalletDetailsFragment extends Fragment {
         ((CircleImageView) view.findViewById(R.id.wallet_details_blockie)).setImageBitmap(scaledBlockie);
 
         //get the balance
-
         GeneralAsyncTask<String, String> asyncTask = new GeneralAsyncTask<>();
         asyncTask.setBackgroundCompletion((params) -> {
             if (params.length < 1) {
@@ -122,6 +121,7 @@ public class WalletDetailsFragment extends Fragment {
         asyncTask.execute(wallet.getAddress());
 
         final RecyclerView thr = view.findViewById(R.id.wallet_details_transactions);
+        final SwipeRefreshLayout srl = view.findViewById(R.id.wallet_details_tx_refresher);
 
         final EtherscanAPI esa = new EtherscanAPI(wallet.getAddress(), 20);
         esa.async_getNextPage(new iResult<ArrayList<EtherscanTransaction>>() {
@@ -242,6 +242,9 @@ public class WalletDetailsFragment extends Fragment {
                                             @Override
                                             public void onResult(ArrayList<EtherscanTransaction> result) {
                                                 loading = false;
+                                                if(f_result.contains(result.get(result.size() - 1))) {
+                                                    result.remove(result.size() - 1);
+                                                }
                                                 f_result.addAll(result);
                                                 if(result.size() < 20) {
                                                     txListComplete.b = true;
@@ -255,7 +258,24 @@ public class WalletDetailsFragment extends Fragment {
                         }
                     }
                 });
-
+                srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        f_result.clear();
+                        esa.reset();
+                        esa.async_getNextPage(result1 -> {
+                            if(f_result.contains(result1.get(result1.size() - 1))) {
+                                result1.remove(result1.size() - 1);
+                            }
+                            f_result.addAll(result1);
+                            if(result1.size() < 20) {
+                                txListComplete.b = true;
+                            }
+                            thr.getAdapter().notifyDataSetChanged();
+                            srl.setRefreshing(false);
+                        });
+                    }
+                });
             }
         });
     }
