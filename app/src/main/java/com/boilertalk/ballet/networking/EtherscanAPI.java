@@ -3,6 +3,7 @@ package com.boilertalk.ballet.networking;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.toolbox.iResult;
 
 import org.json.JSONArray;
@@ -15,7 +16,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class EtherscanAPI {
-    private static final String etherscan_base_address = "https://api-ropsten.etherscan.io";
     private static final String etherscan_tx_pq =
             "/api?module=account&action=txlist&address=$ADDRESS$&sort=asc&startblock=$STARTBLOCK$&page=$PAGE$&offset" +
                     "=$PAGE_SIZE$";
@@ -37,10 +37,11 @@ public class EtherscanAPI {
 
     public ArrayList<EtherscanTransaction> getNextPage() {
         String res = null;
+        String etherscan_api_base_address = VariableHolder.getInstance().activeUrl().etherscanApiUrl();
         ArrayList<EtherscanTransaction> page = new ArrayList<>();
 
         try {
-            InputStream is = new java.net.URL(etherscan_base_address + etherscan_tx_pq
+            InputStream is = new java.net.URL(etherscan_api_base_address + etherscan_tx_pq
                     .replace("$ADDRESS$", walletAddress)
                     .replace("$PAGE$", Integer.toString(currPage))
                     .replace("$PAGE_SIZE$", Integer.toString(pageSize))
@@ -52,7 +53,7 @@ public class EtherscanAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d("EtherscanAPI", "request: " + etherscan_base_address + etherscan_tx_pq
+        Log.d("EtherscanAPI", "request: " + etherscan_api_base_address + etherscan_tx_pq
                 .replace("$ADDRESS$", walletAddress)
                 .replace("$PAGE$", Integer.toString(currPage))
                 .replace("$PAGE_SIZE$", Integer.toString(pageSize))
