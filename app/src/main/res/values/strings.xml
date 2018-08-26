@@ -115,5 +115,7 @@
     <string name="settings_password_new_confirm">Confirm New Password</string>
 
     <string name="settings_password_button_save">SAVE</string>
+
+    <string name="insecure_pw_error">At least 8 characters</string>
     <!-- End Change password strings -->
 </resources>
