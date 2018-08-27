@@ -44,11 +44,11 @@ public class VariableHolder {
         return password;
     }
 
-    // Getters
-
     public void setPassword(String password) {
         this.password = password;
     }
+
+    // Getters
 
     public void getLoadedWallet(@NonNull String keystorePath, @NonNull Wallet wallet, @NonNull iResult<LoadedWallet> completion) {
         LoadedWallet loadedWallet = loadedWallets.get(wallet.getUuid());
@@ -108,8 +108,19 @@ public class VariableHolder {
             toBeDecrypted.add(wallet);
         }
 
+        class DecryptedWallet {
+
+            Credentials credentials;
+            UUID walletUuid;
+
+            DecryptedWallet(Credentials credentials, UUID walletUuid) {
+                this.credentials = credentials;
+                this.walletUuid = walletUuid;
+            }
+        }
+
         // We have to decrypt the missing wallets
-        GeneralAsyncTask<String, List<LoadedWallet>> task = new GeneralAsyncTask<>();
+        GeneralAsyncTask<String, List<DecryptedWallet>> task = new GeneralAsyncTask<>();
         task.setBackgroundCompletion((params) -> {
             List<Wallet> walletParams = new ArrayList<>();
             Realm realm = Realm.getDefaultInstance();
@@ -117,7 +128,7 @@ public class VariableHolder {
                 walletParams.add(realm.where(Wallet.class).equalTo("s_uuid", uuid).findFirst());
             }
 
-            List<LoadedWallet> decrypted = new ArrayList<>();
+            List<DecryptedWallet> decrypted = new ArrayList<>();
 
             for (Wallet wallet : walletParams) {
                 String source = wallet.walletPath(context);
@@ -126,7 +137,7 @@ public class VariableHolder {
                             VariableHolder.getInstance().getPassword(),
                             source
                     );
-                    LoadedWallet l = new LoadedWallet(credentials, wallet);
+                    DecryptedWallet l = new DecryptedWallet(credentials, wallet.getUuid());
 
                     decrypted.add(l);
                 } catch (IOException e) {
@@ -139,12 +150,21 @@ public class VariableHolder {
             return decrypted;
         });
         task.setPostExecuteCompletion((decrypted) -> {
+            // Create LoadedWallets from DecryptedWallets
+            List<LoadedWallet> innerLoadedWallets = new ArrayList<>();
+            Realm realm = Realm.getDefaultInstance();
+            for (DecryptedWallet decryptedWallet : decrypted) {
+                Wallet wallet = realm.where(Wallet.class).equalTo("s_uuid", decryptedWallet.walletUuid.toString()).findFirst();
+
+                innerLoadedWallets.add(new LoadedWallet(decryptedWallet.credentials, wallet));
+            }
+
             // Cache decrypted wallets in main thread
-            for (LoadedWallet l : decrypted) {
+            for (LoadedWallet l : innerLoadedWallets) {
                 loadedWallets.put(l.wallet.getUuid(), l);
             }
 
-            loaded.addAll(decrypted);
+            loaded.addAll(innerLoadedWallets);
 
             completion.onResult(loaded);
         });
@@ -156,6 +176,12 @@ public class VariableHolder {
             tmpDecryptables[i] = toBeDecrypted.get(i).getUuid().toString();
         }
         task.execute(tmpDecryptables);
+    }
+
+    // Reset stuff
+
+    public void resetLoadedWallets() {
+        loadedWallets = new HashMap<>();
     }
 
     public static class LoadedWallet {
