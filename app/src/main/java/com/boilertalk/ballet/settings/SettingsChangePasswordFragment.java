@@ -106,9 +106,15 @@ public class SettingsChangePasswordFragment extends Fragment {
             }
             oldPasswordLayout.setError(null);
 
-            // TODO: Check password strength
-
             String newPassword = newPasswordText.getText().toString();
+
+            if (newPassword.length() < 8) {
+                newPasswordLayout.setError(getString(R.string.insecure_pw_error));
+                pd.dismiss();
+                return;
+            }
+            newPasswordLayout.setError(null);
+
             if (!newPassword.equals(newPasswordRepeatText.getText().toString())) {
                 newPasswordRepeatLayout.setError(getString(R.string.pws_not_matching_snackbar));
                 pd.dismiss();
@@ -219,11 +225,11 @@ public class SettingsChangePasswordFragment extends Fragment {
 
                         // Finally stop the progress dialog and show the success dialog.
                         AlertDialog dialog = new AlertDialog.Builder(context)
-                                .setPositiveButton("OK", (d, w) -> {
+                                .setPositiveButton(R.string.settings_password_success_dialog_button_ok, (d, w) -> {
                                     d.dismiss();
                                 })
-                                .setTitle("Success")
-                                .setMessage("Your password was changed.")
+                                .setTitle(R.string.settings_password_success_dialog_title)
+                                .setMessage(R.string.settings_password_success_dialog_message)
                                 .show();
                         pd.dismiss();
                     });
