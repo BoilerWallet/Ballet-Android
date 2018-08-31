@@ -1,10 +1,8 @@
 package com.boilertalk.ballet.settings;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,12 +29,8 @@ import org.web3j.crypto.WalletUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -165,7 +159,14 @@ public class SettingsChangePasswordFragment extends Fragment {
                 });
                 encryptionTask.setPostExecuteCompletion((savableWallets) -> {
                     if (savableWallets == null) {
-                        // TODO: Show fail.
+                        // Show failure
+                        AlertDialog dialog = new AlertDialog.Builder(context)
+                                .setPositiveButton(R.string.settings_password_dialog_button_ok, (d, w) -> {
+                                    d.dismiss();
+                                })
+                                .setTitle(R.string.settings_password_error_dialog_title)
+                                .setMessage(R.string.settings_password_error_dialog_message)
+                                .show();
                         return;
                     }
 
@@ -225,7 +226,7 @@ public class SettingsChangePasswordFragment extends Fragment {
 
                         // Finally stop the progress dialog and show the success dialog.
                         AlertDialog dialog = new AlertDialog.Builder(context)
-                                .setPositiveButton(R.string.settings_password_success_dialog_button_ok, (d, w) -> {
+                                .setPositiveButton(R.string.settings_password_dialog_button_ok, (d, w) -> {
                                     d.dismiss();
                                 })
                                 .setTitle(R.string.settings_password_success_dialog_title)

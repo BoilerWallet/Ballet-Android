@@ -120,6 +120,10 @@
 
     <string name="settings_password_success_dialog_title">Success</string>
     <string name="settings_password_success_dialog_message">Your password was changed.</string>
-    <string name="settings_password_success_dialog_button_ok">OK</string>
+
+    <string name="settings_password_error_dialog_title">Error</string>
+    <string name="settings_password_error_dialog_message">Something went wrong. Your new password was not saved. Please try again later.</string>
+
+    <string name="settings_password_dialog_button_ok">OK</string>
     <!-- End Change password strings -->
 </resources>
