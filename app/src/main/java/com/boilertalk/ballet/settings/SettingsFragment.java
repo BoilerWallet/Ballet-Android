@@ -74,7 +74,9 @@ public class SettingsFragment extends Fragment {
 
     @OnClick(R.id.settings_change_password_view)
     void changePasswordClicked() {
+        SettingsChangePasswordFragment changePasswordFragment = new SettingsChangePasswordFragment();
 
+        showFragment(changePasswordFragment);
     }
 
     // Helpers

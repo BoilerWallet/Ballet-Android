@@ -108,4 +108,22 @@
 
     <string name="settings_token_total_supply">Total supply: %1$s</string>
     <!-- End Token tracker strings -->
+
+    <!-- Change password strings -->
+    <string name="settings_password_current">Current Password</string>
+    <string name="settings_password_new">New Password</string>
+    <string name="settings_password_new_confirm">Confirm New Password</string>
+
+    <string name="settings_password_button_save">SAVE</string>
+
+    <string name="insecure_pw_error">At least 8 characters</string>
+
+    <string name="settings_password_success_dialog_title">Success</string>
+    <string name="settings_password_success_dialog_message">Your password was changed.</string>
+
+    <string name="settings_password_error_dialog_title">Error</string>
+    <string name="settings_password_error_dialog_message">Something went wrong. Your new password was not saved. Please try again later.</string>
+
+    <string name="settings_password_dialog_button_ok">OK</string>
+    <!-- End Change password strings -->
 </resources>

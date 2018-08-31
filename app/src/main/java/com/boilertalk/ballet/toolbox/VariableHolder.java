@@ -1,6 +1,7 @@
 package com.boilertalk.ballet.toolbox;
 
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.boilertalk.ballet.database.RPCUrl;
@@ -43,11 +44,11 @@ public class VariableHolder {
         return password;
     }
 
-    // Getters
-
     public void setPassword(String password) {
         this.password = password;
     }
+
+    // Getters
 
     public void getLoadedWallet(@NonNull String keystorePath, @NonNull Wallet wallet, @NonNull iResult<LoadedWallet> completion) {
         LoadedWallet loadedWallet = loadedWallets.get(wallet.getUuid());
@@ -81,9 +82,106 @@ public class VariableHolder {
 
             return null;
         });
-        task.setPostExecuteCompletion(completion::onResult);
+        task.setPostExecuteCompletion((decrypted) -> {
+            // Cache decrypted wallet
+            loadedWallets.put(decrypted.wallet.getUuid(), decrypted);
+
+            completion.onResult(decrypted);
+        });
 
         task.execute(wallet);
+    }
+
+    public void getLoadedWallets(@NonNull Context context, @NonNull List<Wallet> wallets, @NonNull iResult<List<LoadedWallet>> completion) {
+        List<LoadedWallet> loaded = new ArrayList<>();
+
+        List<Wallet> toBeDecrypted = new ArrayList<>();
+
+        for (int i = 0; i < wallets.size(); i++) {
+            Wallet wallet = wallets.get(i);
+            LoadedWallet loadedWallet = loadedWallets.get(wallet.getUuid());
+            if (loadedWallet != null) {
+                loaded.add(loadedWallet);
+                continue;
+            }
+
+            toBeDecrypted.add(wallet);
+        }
+
+        class DecryptedWallet {
+
+            Credentials credentials;
+            UUID walletUuid;
+
+            DecryptedWallet(Credentials credentials, UUID walletUuid) {
+                this.credentials = credentials;
+                this.walletUuid = walletUuid;
+            }
+        }
+
+        // We have to decrypt the missing wallets
+        GeneralAsyncTask<String, List<DecryptedWallet>> task = new GeneralAsyncTask<>();
+        task.setBackgroundCompletion((params) -> {
+            List<Wallet> walletParams = new ArrayList<>();
+            Realm realm = Realm.getDefaultInstance();
+            for (String uuid : params) {
+                walletParams.add(realm.where(Wallet.class).equalTo("s_uuid", uuid).findFirst());
+            }
+
+            List<DecryptedWallet> decrypted = new ArrayList<>();
+
+            for (Wallet wallet : walletParams) {
+                String source = wallet.walletPath(context);
+                try {
+                    Credentials credentials = WalletUtils.loadCredentials(
+                            VariableHolder.getInstance().getPassword(),
+                            source
+                    );
+                    DecryptedWallet l = new DecryptedWallet(credentials, wallet.getUuid());
+
+                    decrypted.add(l);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (CipherException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return decrypted;
+        });
+        task.setPostExecuteCompletion((decrypted) -> {
+            // Create LoadedWallets from DecryptedWallets
+            List<LoadedWallet> innerLoadedWallets = new ArrayList<>();
+            Realm realm = Realm.getDefaultInstance();
+            for (DecryptedWallet decryptedWallet : decrypted) {
+                Wallet wallet = realm.where(Wallet.class).equalTo("s_uuid", decryptedWallet.walletUuid.toString()).findFirst();
+
+                innerLoadedWallets.add(new LoadedWallet(decryptedWallet.credentials, wallet));
+            }
+
+            // Cache decrypted wallets in main thread
+            for (LoadedWallet l : innerLoadedWallets) {
+                loadedWallets.put(l.wallet.getUuid(), l);
+            }
+
+            loaded.addAll(innerLoadedWallets);
+
+            completion.onResult(loaded);
+        });
+
+        // Thread fix for realm...
+        // Pass uuids to background thread
+        String[] tmpDecryptables = new String[toBeDecrypted.size()];
+        for (int i = 0; i < toBeDecrypted.size(); i++) {
+            tmpDecryptables[i] = toBeDecrypted.get(i).getUuid().toString();
+        }
+        task.execute(tmpDecryptables);
+    }
+
+    // Reset stuff
+
+    public void resetLoadedWallets() {
+        loadedWallets = new HashMap<>();
     }
 
     public static class LoadedWallet {

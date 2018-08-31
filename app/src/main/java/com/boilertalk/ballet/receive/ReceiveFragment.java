@@ -17,6 +17,7 @@ import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.database.Wallet;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
+import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.walletslist.SelectWalletDialogFragment;
 
 import net.glxn.qrgen.android.QRCode;
@@ -111,8 +112,8 @@ public class ReceiveFragment extends Fragment {
         selectedAccountAddressText.setText(selectedWallet.getAddress());
 
         // Set QR Code
-        // TODO: Change rpc id to selected network
-        String qrUrl = "ethereum:" + selectedWallet.getAddress() + "@" + "1";
+        // See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-681.md
+        String qrUrl = "ethereum:" + selectedWallet.getAddress() + "@" + VariableHolder.getInstance().activeUrl().getChainId();
         int qrSize = perfectQRSize();
         Bitmap qrBm = QRCode.from(qrUrl).withSize(qrSize, qrSize).bitmap();
         receiveQRCode.setImageBitmap(qrBm);

@@ -1,5 +1,9 @@
 package com.boilertalk.ballet.database;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
 
 import org.web3j.crypto.Keys;
@@ -58,5 +62,9 @@ public class Wallet extends RealmObject {
 
     public EtherBlockies etherBlockies(int size, int scale) {
         return new EtherBlockies(address.toCharArray(), size, scale);
+    }
+
+    public String walletPath(@NonNull Context context) {
+        return context.getDir(ConstantHolder.WALETFILES_FOLDER, Context.MODE_PRIVATE).getAbsolutePath() + "/" + getWalletFileName();
     }
 }
