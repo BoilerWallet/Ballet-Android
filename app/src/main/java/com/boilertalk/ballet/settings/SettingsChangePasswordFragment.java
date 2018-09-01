@@ -79,7 +79,7 @@ public class SettingsChangePasswordFragment extends Fragment {
 
     @OnClick(R.id.settings_password_save)
     void saveButtonClicked() {
-        final ProgressDialog pd = ProgressDialog.show(context, getString(R.string.loading_), getString(R.string.checking_password));
+        final ProgressDialog pd = ProgressDialog.show(context, getString(R.string.loading_), getString(R.string.settings_password_progress_message));
 
         GeneralAsyncTask<String, Boolean> passwordCheck = new GeneralAsyncTask<>();
         passwordCheck.setBackgroundCompletion(objects -> {
@@ -161,7 +161,7 @@ public class SettingsChangePasswordFragment extends Fragment {
                     if (savableWallets == null) {
                         // Show failure
                         AlertDialog dialog = new AlertDialog.Builder(context)
-                                .setPositiveButton(R.string.settings_password_dialog_button_ok, (d, w) -> {
+                                .setPositiveButton(R.string.settings_dialog_button_ok, (d, w) -> {
                                     d.dismiss();
                                 })
                                 .setTitle(R.string.settings_password_error_dialog_title)
@@ -226,7 +226,7 @@ public class SettingsChangePasswordFragment extends Fragment {
 
                         // Finally stop the progress dialog and show the success dialog.
                         AlertDialog dialog = new AlertDialog.Builder(context)
-                                .setPositiveButton(R.string.settings_password_dialog_button_ok, (d, w) -> {
+                                .setPositiveButton(R.string.settings_dialog_button_ok, (d, w) -> {
                                     d.dismiss();
                                 })
                                 .setTitle(R.string.settings_password_success_dialog_title)

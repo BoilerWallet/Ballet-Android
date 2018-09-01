@@ -88,6 +88,9 @@ dependencies {
     // Lottie animation
     implementation 'com.airbnb.android:lottie:2.5.6'
 
+    // Markdown
+    implementation 'com.github.mukeshsolanki:MarkdownView-Android:1.0.6'
+
     // Testing
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
