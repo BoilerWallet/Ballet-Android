@@ -74,7 +74,16 @@ public class SettingsFragment extends Fragment {
 
     @OnClick(R.id.settings_change_password_view)
     void changePasswordClicked() {
+        SettingsChangePasswordFragment changePasswordFragment = new SettingsChangePasswordFragment();
 
+        showFragment(changePasswordFragment);
+    }
+
+    @OnClick(R.id.settings_open_source_libraries_view)
+    void openSourceLibrariesClicked() {
+        SettingsOpenSourceLibraries openSourceLibraries = new SettingsOpenSourceLibraries();
+
+        showFragment(openSourceLibraries);
     }
 
     // Helpers

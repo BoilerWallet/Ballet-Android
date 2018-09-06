@@ -47,10 +47,10 @@ public class NavigationActivity extends AppCompatActivity implements AddWalletFr
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment currFrag = fragmentManager.getPrimaryNavigationFragment();
             if(currFrag != null) {
-                if(currFrag.getTag().equals("details")) {
+                if(currFrag.getTag() != null && currFrag.getTag().equals("details")) {
                     fragmentManager.popBackStackImmediate();
-                    fragmentTransaction.detach(fragmentManager
-                            .findFragmentByTag("navitem_nr_" + R.id.navigation_wallet));
+                    fragmentTransaction.detach(fragmentManager.findFragmentByTag("navitem_nr_" + R.id.navigation_wallet));
+                    fragmentTransaction.detach(fragmentManager.findFragmentByTag("navitem_nr_" + R.id.navigation_settings));
                 }
                 fragmentTransaction.detach(currFrag);
             }

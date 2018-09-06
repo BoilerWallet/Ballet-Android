@@ -32,7 +32,8 @@ platform :android do
   desc 'Submit a new Beta Build to Crashlytics Beta and Play Beta'
   lane :beta do
     # First of all generate screenshots
-    screenshots
+    # TODO: Fix screenshots on travis
+    # screenshots
 
     # Build app
     gradle(
