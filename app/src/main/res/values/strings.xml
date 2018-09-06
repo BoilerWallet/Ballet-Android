@@ -97,6 +97,8 @@
     <string name="settings_donate_title">Donate ⚗️</string>
     <string name="send_failure">Send failed.</string>
     <string name="send_success">Send succeeded.</string>
+
+    <string name="settings_dialog_button_ok">OK</string>
     <!-- End Settings strings -->
 
     <!-- Token tracker strings -->
@@ -116,6 +118,8 @@
 
     <string name="settings_password_button_save">SAVE</string>
 
+    <string name="settings_password_progress_message">Changing your password</string>
+
     <string name="insecure_pw_error">At least 8 characters</string>
 
     <string name="settings_password_success_dialog_title">Success</string>
@@ -123,7 +127,12 @@
 
     <string name="settings_password_error_dialog_title">Error</string>
     <string name="settings_password_error_dialog_message">Something went wrong. Your new password was not saved. Please try again later.</string>
-
-    <string name="settings_password_dialog_button_ok">OK</string>
     <!-- End Change password strings -->
+
+    <!-- Open Source Libraries strings -->
+    <string name="settings_open_source_progress_message">Fetching newest version from server</string>
+
+    <string name="settings_open_source_error_title">Error</string>
+    <string name="settings_open_source_error_message">Could not fetch data from server. Please try again later.</string>
+    <!-- End Open Source Libraries strings -->
 </resources>
