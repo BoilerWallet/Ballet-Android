@@ -17,17 +17,13 @@ import android.widget.TextView;
 import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.database.Wallet;
 import com.boilertalk.ballet.networking.EthGasStationAPI;
-import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.ConvertHelper;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
-import com.boilertalk.ballet.toolbox.VariableHolder;
 import com.boilertalk.ballet.walletslist.SelectWalletDialogFragment;
 
 import org.web3j.crypto.Keys;
-import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -41,6 +37,7 @@ public class SendFragment extends Fragment {
     private Button          selectAccountButton;
     private EditText        receiverAddressInput;
     private EditText        amountInput;
+    private Button          currencyButton;
     private EditText        gasLimitInput;
     private TextView        feeInfoView;
     private SeekBar         feeInput;
@@ -71,10 +68,18 @@ public class SendFragment extends Fragment {
         selectAccountButton     = view.findViewById(R.id.send_select_account_button);
         receiverAddressInput    = view.findViewById(R.id.send_receiver_addr_edittext);
         amountInput             = view.findViewById(R.id.send_ammount_edittext);
+        currencyButton          = view.findViewById(R.id.send_select_currency_button);
         gasLimitInput           = view.findViewById(R.id.send_gas_limit_edittext);
         feeInfoView             = view.findViewById(R.id.send_fee_description_text);
         feeInput                = view.findViewById(R.id.send_fee_seeker);
         sendButton              = view.findViewById(R.id.send_select_send_button);
+
+
+
+
+        currencyButton.setOnClickListener((v) -> {
+            // TODO: Open SettingsTrackERC20TokensFragment as dialog and setArguments (SettingsTrackERC20TokensFragment.FOR_SELECTING_KEY = true)
+        });
 
 
 

@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,9 @@ public class SettingsTrackERC20TokensFragment extends Fragment {
 
     @BindView(R.id.tokens_list_view) RecyclerView tokensListView;
 
+    public static final String FOR_SELECTING_KEY = "for_selecting";
+    private boolean forSelecting = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +58,9 @@ public class SettingsTrackERC20TokensFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        forSelecting = args != null && args.getBoolean(FOR_SELECTING_KEY, false);
 
         RPCUrl selectedNetwork = VariableHolder.getInstance().activeUrl();
 
@@ -100,6 +107,9 @@ public class SettingsTrackERC20TokensFragment extends Fragment {
                 tokenName.setText(token.getName());
                 tokenAddress.setText(token.getAddressString());
 
+                // Click listener
+                holder.itemView.setOnClickListener((v) -> tokenClicked(token));
+
                 EtherBlockies blockies = new EtherBlockies(token.getAddressString().toLowerCase().toCharArray(), 8, 4);
                 Bitmap blockiebmp = Bitmap.createScaledBitmap(
                         blockies.getBitmap(),
@@ -119,6 +129,14 @@ public class SettingsTrackERC20TokensFragment extends Fragment {
     }
 
     // Actions
+
+    private void tokenClicked(ERC20TrackedToken token) {
+        if (forSelecting) {
+            Log.d("SettingsTrackERC20", "Token selected: " + token.getName());
+
+            // TODO: onActivityResult and close fragment
+        }
+    }
 
     @OnClick(R.id.settings_track_token_button)
     void trackTokenButtonClicked() {
