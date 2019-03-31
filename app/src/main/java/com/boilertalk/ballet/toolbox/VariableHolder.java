@@ -225,7 +225,7 @@ public class VariableHolder {
     private RPCUrl defaultMainnetRPCUrl(Realm realm) {
         RPCUrl mainnet = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         mainnet.setName("Infura Mainnet");
-        mainnet.setUrl("https://mainnet.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        mainnet.setUrl("https://mainnet.infura.io/v3/9bde93f620304aa4a340c65799ce6796");
         mainnet.setChainId(1);
         mainnet.setActive(true);
 
@@ -245,19 +245,19 @@ public class VariableHolder {
 
         RPCUrl ropsten = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         ropsten.setName("Infura Ropsten");
-        ropsten.setUrl("https://ropsten.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        ropsten.setUrl("https://ropsten.infura.io/v3/9bde93f620304aa4a340c65799ce6796");
         ropsten.setChainId(3);
         ropsten.setActive(false);
 
         RPCUrl rinkeby = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         rinkeby.setName("Infura Rinkeby");
-        rinkeby.setUrl("https://rinkeby.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        rinkeby.setUrl("https://rinkeby.infura.io/v3/9bde93f620304aa4a340c65799ce6796");
         rinkeby.setChainId(4);
         rinkeby.setActive(false);
 
         RPCUrl kovan = realm.createObject(RPCUrl.class, UUID.randomUUID().toString());
         kovan.setName("Infura Kovan");
-        kovan.setUrl("https://kovan.infura.io/m6d0dZdIbdR5d6bvHDQj");
+        kovan.setUrl("https://kovan.infura.io/v3/9bde93f620304aa4a340c65799ce6796");
         kovan.setChainId(42);
         kovan.setActive(false);
 
