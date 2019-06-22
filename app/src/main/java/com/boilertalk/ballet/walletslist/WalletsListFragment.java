@@ -1,6 +1,7 @@
 package com.boilertalk.ballet.walletslist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import io.realm.RealmResults;
 public class WalletsListFragment extends Fragment {
 
     private static final String TAG = "WalletsListFragmet";
+    private static final int RC_SEND_CONFIRM = 1;
     private FloatingActionButton addWalletButton;
     private RecyclerView walletsListRecycler;
     private SwipeRefreshLayout refresher;
@@ -83,11 +85,13 @@ public class WalletsListFragment extends Fragment {
             }
         });
 
+        final WalletsListFragment that = this;
         addWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "create wallet clicked");
                 AddWalletFragment awf = new AddWalletFragment();
+                awf.setTargetFragment(that, RC_SEND_CONFIRM);
                 awf.show(getActivity().getSupportFragmentManager(), "AddWalletDialog");
             }
         });
@@ -133,10 +137,10 @@ public class WalletsListFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                //TODO delete outdated information
                 final ProgressBar pb = holder.itemView.findViewById(R.id.image_progress_spinner);
                 Wallet wallet = wallets.get(position);
                 ((TextView) holder.itemView.findViewById(R.id.wallet_name)).setText(wallet.getWalletName());
+                ((TextView) holder.itemView.findViewById(R.id.wallet_balance)).setText(getString(R.string.balance_eth_default));
 
                 final RecyclerView.ViewHolder holder_f = holder;
 
@@ -224,5 +228,16 @@ public class WalletsListFragment extends Fragment {
         });
 
         getBalanceTask.execute();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RC_SEND_CONFIRM:
+                walletsListRecycler.getAdapter().notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
     }
 }

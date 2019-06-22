@@ -3,6 +3,7 @@ package com.boilertalk.ballet.addwallet;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,6 +24,7 @@ import com.boilertalk.ballet.R;
 import com.boilertalk.ballet.database.Wallet;
 import com.boilertalk.ballet.toolbox.ConstantHolder;
 import com.boilertalk.ballet.toolbox.EtherBlockies;
+import com.boilertalk.ballet.toolbox.GeneralAsyncTask;
 import com.boilertalk.ballet.toolbox.Keyutils;
 import com.boilertalk.ballet.toolbox.VariableHolder;
 
@@ -156,39 +158,41 @@ public class AddWalletFragment extends DialogFragment {
                         //save wallet in the database and create a wallet file
                         final ProgressDialog pd = android.app.ProgressDialog.show(viow.getContext(),
                                 getString(R.string.loading_), getString(R.string.saving_wallet));
-                        AsyncTask.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                String interesting = null;
-                                try {
-                                    interesting = WalletUtils.generateWalletFile(VariableHolder
-                                                    .getInstance().getPassword(), genKeypairs[(int)selectedContainer.getTag()],
-                                            getContext().getDir(ConstantHolder.WALETFILES_FOLDER,
-                                                    Context.MODE_PRIVATE),
-                                            false);
-                                } catch (CipherException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                Log.d("WWWWW", "Creating walletfile: " + interesting);
-
-                                Realm realm = Realm.getDefaultInstance();
-                                realm.beginTransaction();
-                                //things in realm
-                                Wallet wallet = realm.createObject(Wallet.class, UUID.randomUUID().toString());
-                                wallet.setWalletFileName(interesting);
-                                wallet.setWalletName(walletNameInput.getText().toString());
-                                wallet.setAddress(genCredentials[(int)selectedContainer.getTag()]
-                                        .getAddress());
-                                //done with realm
-                                realm.commitTransaction();
-
-                                dismiss();
-                                pd.dismiss();
+                        GeneralAsyncTask<Void, Void> saveWalletTask = new GeneralAsyncTask<>();
+                        saveWalletTask.setBackgroundCompletion((Void) -> {
+                            String interesting = null;
+                            try {
+                                interesting = WalletUtils.generateWalletFile(VariableHolder
+                                                .getInstance().getPassword(), genKeypairs[(int)selectedContainer.getTag()],
+                                        getContext().getDir(ConstantHolder.WALETFILES_FOLDER,
+                                                Context.MODE_PRIVATE),
+                                        false);
+                            } catch (CipherException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        });
+                            Log.d("WWWWW", "Creating walletfile: " + interesting);
 
+                            Realm realm = Realm.getDefaultInstance();
+                            realm.beginTransaction();
+                            //things in realm
+                            Wallet wallet = realm.createObject(Wallet.class, UUID.randomUUID().toString());
+                            wallet.setWalletFileName(interesting);
+                            wallet.setWalletName(walletNameInput.getText().toString());
+                            wallet.setAddress(genCredentials[(int)selectedContainer.getTag()]
+                                    .getAddress());
+                            //done with realm
+                            realm.commitTransaction();
+                            return null;
+                        });
+                        saveWalletTask.setPostExecuteCompletion((Void) -> {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), 1, new Intent());
+
+                            dismiss();
+                            pd.dismiss();
+                        });
+                        saveWalletTask.execute();
                     }
                 }
             }
