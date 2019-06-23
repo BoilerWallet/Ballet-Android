@@ -1,9 +1,9 @@
 package com.boilertalk.ballet.toolbox
 
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.android.UI
+import kotlinx.coroutines.async
 import java.lang.Exception
 
 // Async awaits
